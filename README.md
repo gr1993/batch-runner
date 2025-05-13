@@ -47,27 +47,24 @@
 3. 초기에 엑셀데이터를 읽어 전체 정류소 정보를 DB에 저장
 
 
-# 공공데이터포털 API
+# 외부 API
 
-### 노선ID와 구간정보로 차량들의 위치정보를 조회
-* 문서 링크 : https://www.data.go.kr/data/15000332/openapi.do
-* 서비스 URL : http://ws.bus.go.kr/api/rest/buspos/getBusPosByRouteSt
+### 공공데이터포털 API
+* 노선ID와 구간정보로 차량들의 위치정보를 조회
+	* 문서 링크 : https://www.data.go.kr/data/15000332/openapi.do
+	* 서비스 URL : http://ws.bus.go.kr/api/rest/buspos/getBusPosByRouteSt
+* 특정 정류소에 대한 버스 도착예정 정보 제공
+	* 문서 링크 : https://www.data.go.kr/data/15000314/openapi.do
+	* 서비스 URL : http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRouteAll
 
-### 특정 정류소에 대한 버스 도착예정 정보 제공
-* 문서 링크 : https://www.data.go.kr/data/15000314/openapi.do
-* 서비스 URL : http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRouteAll
+* 노선에 대한 정보 제공
+	* 문서 링크 : https://www.data.go.kr/data/15000193/openapi.do
+	* 서비스 URL : http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute
 
-### 노선에 대한 정보 제공
-* 문서 링크 : https://www.data.go.kr/data/15000193/openapi.do
-* 서비스 URL : http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute
-
-
-# 서울 열린데이터광장
-
-### 서울시 버스 노선 정보 조회
-* 문서 링크 : https://data.seoul.go.kr/dataList/OA-1095/F/1/datasetView.do
-* xlsx 파일 제공
-
-### 서울시 버스정류소 위치정보
-* 문서 링크 : https://data.seoul.go.kr/dataList/OA-15067/S/1/datasetView.do
-* xlsx 파일 제공
+### 서울 열린데이터광장
+* 서울시 버스 노선 정보 조회
+	* 문서 링크 : https://data.seoul.go.kr/dataList/OA-1095/F/1/datasetView.do
+	* xlsx 파일 제공
+* 서울시 버스정류소 위치정보
+	* 문서 링크 : https://data.seoul.go.kr/dataList/OA-15067/S/1/datasetView.do
+	* xlsx 파일 제공
