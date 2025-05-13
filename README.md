@@ -20,17 +20,17 @@
 
 # 개발 환경
 
-## batch-core 기술
+### batch-core 기술
 * Spring Boot 3.4.5 (JDK 17)
 * spring-boot-starter-quartz : 스케줄러
 * postgresql
 
 
-## batch-runner 기술
+### batch-runner 기술
 * Spring Boot 3.4.5 (JDK 17)
 
 
-## 관리자 기능
+### 관리자 기능
 * 지도에 버스 및 정류장의 위치 정보 표시
 * 버스 도착 예상 정보 제공
 * 현재 스케줄러에 등록된 Job 리스트 조회
@@ -38,7 +38,7 @@
 * Job의 실행 이력 조회(페이지네이션)
 
 
-## 배치 스케줄러
+### 배치 스케줄러
 매 1분마다 동작하는 Job이 2개 이상이므로 다중 배치서버에서 Job 실행 중복이  
 일어나지 않도록 Quartz를 사용한 스케줄 클러스터링을 진행할 예정이다.  
 
@@ -47,7 +47,7 @@
 3. 초기에 엑셀데이터를 읽어 전체 정류소 정보를 DB에 저장
 
 
-## 공공데이터포털 API
+# 공공데이터포털 API
 
 ### 노선ID와 구간정보로 차량들의 위치정보를 조회
 * 문서 링크 : https://www.data.go.kr/data/15000332/openapi.do
@@ -62,7 +62,7 @@
 * 서비스 URL : http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute
 
 
-## 서울 열린데이터광장
+# 서울 열린데이터광장
 
 ### 서울시 버스 노선 정보 조회
 * 문서 링크 : https://data.seoul.go.kr/dataList/OA-1095/F/1/datasetView.do
