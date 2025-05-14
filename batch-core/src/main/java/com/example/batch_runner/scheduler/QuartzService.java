@@ -1,13 +1,10 @@
 package com.example.batch_runner.scheduler;
 
-import com.example.batch_runner.job.SimpleJob;
 import jakarta.annotation.PostConstruct;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -20,7 +17,7 @@ public class QuartzService {
     public void init() throws SchedulerException {
         scheduler.clear();
 
-        addJob(SimpleJob.class, "SimpleJob", "단순 실행 Job 입니다.", new HashMap<>(), "0/10 * * * * ?");
+        //addJob(SimpleJob.class, "SimpleJob", "단순 실행 Job 입니다.", new HashMap<>(), "0/10 * * * * ?");
 
         if (!scheduler.isStarted()) {
             scheduler.start();
