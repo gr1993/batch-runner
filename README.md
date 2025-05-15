@@ -23,6 +23,8 @@
 ### batch-core 기술
 * Spring Boot 3.4.5 (JDK 17)
 * spring-boot-starter-quartz : 스케줄러
+* spring-boot-starter-batch
+* JPA
 * postgresql
 
 

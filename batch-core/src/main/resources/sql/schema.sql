@@ -20,6 +20,10 @@ COMMENT ON COLUMN route_stop_info.node_name IS '정류소명 (예: 구로1동주
 COMMENT ON COLUMN route_stop_info.pos_x IS '경도 (X좌표)';
 COMMENT ON COLUMN route_stop_info.pos_y IS '위도 (Y좌표)';
 
+-- route_stop_info 테이블 PK 설정
+ALTER TABLE route_stop_info
+ADD CONSTRAINT pk_route_stop_info
+PRIMARY KEY (route_id, node_seq);
 
 -- 노선 ID에 대한 인덱스
 CREATE INDEX idx_route_stop_info_route_id
