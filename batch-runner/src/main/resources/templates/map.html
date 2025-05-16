@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>관리자 페이지</title>
+
+    <link rel="stylesheet" href="/css/common.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🛠 관리자</h2>
+        <div class="nav-item active">관심 정류소 보기</div>
+        <div class="nav-item">작업 관리</div>
+    </div>
+
+    <div class="content">
+        <h1>관심 정류소 보기</h1>
+
+        <div id="map" style="width:500px;height:400px;"></div>
+    </div>
+
+    <!-- appkey : JavaScript 키 (또한 웹 플랫폼에 사이트 도메인도 등록되어 있어야 함) -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2b9896e6862ec303926139e843ab9a4e"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(getCurrentPos);
+            } else {
+                alert("이 브라우저는 Geolocation을 지원하지 않습니다.");
+            }
+        });
+
+        function getCurrentPos(position) {
+            // 현재 위치의 위도, 경도
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(lat, lon),
+                level: 3
+            };
+
+            var map = new kakao.maps.Map(container, options);
+
+            var marker = new kakao.maps.Marker({
+                position: new kakao.maps.LatLng(lat, lon) // 마커 위치 (현재 위치)
+            });
+            marker.setMap(map);
+        }
+
+    </script>
+
+</body>
+</html>
+
