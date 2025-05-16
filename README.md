@@ -1,14 +1,20 @@
 # 프로젝트 구조
 
-<pre><code>```
-[batch-core (Spring Batch + Quartz)]
-    └── 실제 Job 실행 담당
-    └── Web 의존성 최소화
+이 프로젝트는 Gradle 기반 멀티모듈 구조로 구성되어 있으며, 각 모듈의 역할은 다음과 같다
 
-[batch-runner (Spring Boot Web)]
-    └── REST API로 Job 실행 트리거 (JobLauncher)
-    └── DB에서 실행 로그 조회 (Spring Batch 메타테이블 사용)
-    └── 실행 결과 모니터링 UI 제공
+<pre><code>```
+[batch-common]
+    └── batch-core와 batch-runner에서 공통으로 사용하는 도메인 및 유틸 클래스를 포함한 공통 모듈
+
+[batch-core]
+    └── 실제 배치 Job 실행을 담당하는 비즈니스 로직 중심 모듈
+    └── Spring Batch와 Quartz를 사용하여 정기적인 Job 실행 처리
+
+[batch-runner]
+    └── 관리자 및 모니터링 기능을 제공하는 웹 기반 실행 및 관리 모듈
+    └── 지도 기반 UI (Geo 관련 기능)
+    └── 배치 Job 실행 트리거 및 관리 UI 제공
+    └── Spring Batch 메타 테이블을 활용한 실행 로그 조회 및 모니터링 제공
 ``` </code></pre>
 
 
