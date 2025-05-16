@@ -51,6 +51,8 @@
 
 # 외부 API
 
+공공데이터포털 API에 활용신청을 하더라도 인증키가 승인되기(동기화) 까지 상당히 오래걸렸다. (일주일 정도?)
+
 ### 공공데이터포털 API
 * 노선ID와 구간정보로 차량들의 위치정보를 조회
 	* 문서 링크 : https://www.data.go.kr/data/15000332/openapi.do
@@ -58,7 +60,6 @@
 * 특정 정류소에 대한 버스 도착예정 정보 제공
 	* 문서 링크 : https://www.data.go.kr/data/15000314/openapi.do
 	* 서비스 URL : http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRouteAll
-
 * 노선에 대한 정보 제공
 	* 문서 링크 : https://www.data.go.kr/data/15000193/openapi.do
 	* 서비스 URL : http://ws.bus.go.kr/api/rest/busRouteInfo/getStaionByRoute
@@ -67,6 +68,6 @@
 * 서울시 버스 노선 정보 조회
 	* 문서 링크 : https://data.seoul.go.kr/dataList/OA-1095/F/1/datasetView.do
 	* xlsx 파일 제공
-* 서울시 버스정류소 위치정보
+* 서울시 버스정류소 위치정보(사용안함)
 	* 문서 링크 : https://data.seoul.go.kr/dataList/OA-15067/S/1/datasetView.do
 	* xlsx 파일 제공
