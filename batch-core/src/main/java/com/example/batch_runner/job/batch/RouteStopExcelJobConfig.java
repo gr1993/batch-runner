@@ -37,7 +37,7 @@ public class RouteStopExcelJobConfig {
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory emf;
 
-    private static final int CHUNK_SIZE = 10;
+    private static final int CHUNK_SIZE = 5000;
 
     // 엑셀 데이터를 읽어서 변경된 부분만 저장 및 수정
     // 변경 빈도가 낮아서(예: 10% 미만 변경) 차등 갱신이 완전 덮어쓰기보다 효율적이라고 판단함
