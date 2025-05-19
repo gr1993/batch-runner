@@ -10,7 +10,7 @@
     └── 실제 배치 Job 실행을 담당하는 비즈니스 로직 중심 모듈
     └── Spring Batch와 Quartz를 사용하여 정기적인 Job 실행 처리
 
-[batch-runner]
+[batch-web]
     └── 관리자 및 모니터링 기능을 제공하는 웹 기반 실행 및 관리 모듈
     └── 지도 기반 UI (Geo 관련 기능)
     └── 배치 Job 실행 트리거 및 관리 UI 제공
@@ -34,7 +34,7 @@
 * postgresql
 
 
-### batch-runner 기술
+### batch-web 기술
 * Spring Boot 3.4.5 (JDK 17)
 * thymeleaf
 * JPA
