@@ -4,7 +4,7 @@
 
 <pre><code>```
 [batch-common]
-    └── batch-core와 batch-runner에서 공통으로 사용하는 도메인 및 유틸 클래스를 포함한 공통 모듈
+    └── batch-core와 batch-web에서 공통으로 사용하는 도메인 및 유틸 클래스를 포함한 공통 모듈
 
 [batch-core]
     └── 실제 배치 Job 실행을 담당하는 비즈니스 로직 중심 모듈
