@@ -32,3 +32,32 @@ ON route_stop_info (route_id);
 -- 정류소 ID에 대한 인덱스
 CREATE INDEX idx_route_stop_info_node_id
 ON route_stop_info (node_id);
+
+
+-- 스케줄러 작업 관리 테이블
+CREATE TABLE scheduler_job (
+    id BIGSERIAL PRIMARY KEY,
+    job_name VARCHAR(100) NOT NULL UNIQUE,
+    job_group VARCHAR(100) NOT NULL DEFAULT 'DEFAULT',
+    cron_expression VARCHAR(100) NOT NULL,
+    use_yn CHAR(1) NOT NULL,
+    description TEXT,
+    job_params_json JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+COMMENT ON TABLE scheduler_job IS '스케줄러 작업 관리 테이블';
+
+COMMENT ON COLUMN scheduler_job.id IS '식별자 (PK)';
+COMMENT ON COLUMN scheduler_job.job_name IS 'Quartz Job 이름 (QRTZ_JOB_DETAILS의 JOB_NAME과 연동)';
+COMMENT ON COLUMN scheduler_job.job_group IS 'Quartz Job 그룹명 (기본값: DEFAULT)';
+COMMENT ON COLUMN scheduler_job.cron_expression IS 'Cron 표현식 (예: 0 0 * * * ?)';
+COMMENT ON COLUMN scheduler_job.use_yn IS '사용 여부';
+COMMENT ON COLUMN scheduler_job.description IS 'Job에 대한 설명';
+COMMENT ON COLUMN scheduler_job.job_params_json IS 'Job 실행 시 넘길 파라미터 (JSON 형식)';
+COMMENT ON COLUMN scheduler_job.created_at IS '생성 일시';
+COMMENT ON COLUMN scheduler_job.updated_at IS '수정 일시';
+
+-- scheduler_job 테이블 인덱스 추가
+ALTER TABLE scheduler_job ADD CONSTRAINT uq_job_name_group UNIQUE (job_name, job_group);
