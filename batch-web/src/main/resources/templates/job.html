@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>관리자 페이지</title>
+
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/job.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="sidebar">
+        <h2>🛠 관리자</h2>
+        <div class="nav-item" onclick="location.href='/';">관심 정류소 보기</div>
+        <div class="nav-item active" onclick="location.href='/job';">작업 관리</div>
+    </div>
+
+    <div class="content">
+        <h1>작업 관리</h1>
+
+        <div class="card">
+            <form id="searchForm">
+                <div class="form-row">
+                    <label for="memberId">작업명</label>
+                    <input type="text" id="memberId" name="memberId">
+                    <button type="button" id="btnNavbarSearch" onclick="searchOrderList();">검색</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">작업 목록</div>
+            <div class="card-body" style="padding: 0;">
+                <div id="jobList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var grid = new gridjs.Grid({
+             columns: [
+               {id: "id", name: "작업명", width: "150px"},
+               {id: "status", name: "상태", width: "100px"},
+               {id: "cron", name: "Cron 스케줄", width: "100px"},
+               {
+                   id: "startDate",
+                   name: "최근 실행시간",
+                   width: "200px",
+                   formatter: (cell) => new Date(cell).toLocaleString("ko-KR", {
+                     year: "numeric",
+                     month: "2-digit",
+                     day: "2-digit",
+                     hour: "2-digit",
+                     minute: "2-digit",
+                     second: "2-digit"
+                   })
+               },
+             ],
+             data: []
+           }).render(document.getElementById("jobList"));
+
+           // Event
+           grid.on('rowClick', (...args) => {
+               //const orderId = args[1]._cells[0].data;
+               //showOrderDetailModal(orderId);
+
+               alert('hello');
+           });
+
+        });
+    </script>
+</body>
+</html>
+
