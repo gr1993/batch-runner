@@ -120,6 +120,28 @@ public class QuartzService {
         }
     }
 
+    /**
+     * 스케줄러의 Job 스케줄 중단 (이미 실행중인 Job은 계속 진행됨)
+     */
+    public void pauseJob(String jobName) {
+        try {
+            scheduler.pauseJob(new JobKey(jobName, JOB_GROUP));
+        } catch (SchedulerException e) {
+            throw new RuntimeException("Failed to pause job: " + jobName, e);
+        }
+    }
+
+    /**
+     * 스케줄러의 Job 스케줄 재개
+     */
+    public void resumeJob(String jobName) {
+        try {
+            scheduler.resumeJob(new JobKey(jobName, JOB_GROUP));
+        } catch (SchedulerException e) {
+            throw new RuntimeException("Failed to resume job: " + jobName, e);
+        }
+    }
+
     private JobDetail buildJobDetail(Class<? extends Job> job
             , String name
             , String desc

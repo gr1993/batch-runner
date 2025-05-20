@@ -94,12 +94,7 @@ public class SchedulerJobService {
      */
     @Transactional
     public void updateScheduleInfo(long id, SchedulerJobUpdateDto updateDto) {
-        Optional<SchedulerJob> find = schedulerJobRepository.findById(id);
-        if (find.isEmpty()) {
-            throw new IllegalArgumentException("not exist job");
-        }
-
-        SchedulerJob schedulerJob = find.get();
+        SchedulerJob schedulerJob = getSchedulerJobById(id);
         schedulerJob.setCronExpression(updateDto.getCronExpression());
         schedulerJob.setDescription(updateDto.getDescription());
 
@@ -112,16 +107,27 @@ public class SchedulerJobService {
      */
     @Transactional
     public void deleteScheduleInfo(long id) {
-        Optional<SchedulerJob> find = schedulerJobRepository.findById(id);
-        if (find.isEmpty()) {
-            throw new IllegalArgumentException("not exist job");
-        }
-
-        SchedulerJob schedulerJob = find.get();
+        SchedulerJob schedulerJob = getSchedulerJobById(id);
         // 스케줄러에서 Job을 제거
         quartzService.deleteJob(schedulerJob.getJobName());
 
         schedulerJobRepository.delete(schedulerJob);
+    }
+
+    /**
+     * 스케줄러의 Job 스케줄 중단 (이미 실행중인 Job은 계속 진행됨)
+     */
+    public void pauseSchedule(long id) {
+        SchedulerJob schedulerJob = getSchedulerJobById(id);
+        quartzService.pauseJob(schedulerJob.getJobName());
+    }
+
+    /**
+     * 스케줄러의 Job 스케줄 재개
+     */
+    public void resumeSchedule(long id) {
+        SchedulerJob schedulerJob = getSchedulerJobById(id);
+        quartzService.resumeJob(schedulerJob.getJobName());
     }
 
     private void upsertJobInQuartz(SchedulerJob schedulerJob) {
@@ -136,5 +142,13 @@ public class SchedulerJobService {
         } catch (SchedulerException ex) {
             throw new RuntimeException("Job Info Update Failed!", ex);
         }
+    }
+
+    private SchedulerJob getSchedulerJobById(long id) {
+        Optional<SchedulerJob> find = schedulerJobRepository.findById(id);
+        if (find.isEmpty()) {
+            throw new IllegalArgumentException("not exist job");
+        }
+        return find.get();
     }
 }

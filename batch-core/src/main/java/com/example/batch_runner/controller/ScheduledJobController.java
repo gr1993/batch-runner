@@ -3,6 +3,7 @@ package com.example.batch_runner.controller;
 import com.example.batch_runner.dto.ScheduleInfoDto;
 import com.example.batch_runner.dto.SchedulerJobCreateDto;
 import com.example.batch_runner.dto.SchedulerJobUpdateDto;
+import com.example.batch_runner.scheduler.QuartzService;
 import com.example.batch_runner.service.SchedulerJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +52,24 @@ public class ScheduledJobController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> updateScheduleInfo(@PathVariable(name = "id") long id) {
         schedulerJobService.deleteScheduleInfo(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 스케줄러의 Job 스케줄 중단 (이미 실행중인 Job은 계속 진행됨)
+     */
+    @PostMapping("/pause/{id}")
+    public ResponseEntity<Void> pauseSchedule(@PathVariable(name = "id") long id) {
+        schedulerJobService.pauseSchedule(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 스케줄러의 Job 스케줄 재개
+     */
+    @PostMapping("/resume/{id}")
+    public ResponseEntity<Void> resumeSchedule(@PathVariable(name = "id") long id) {
+        schedulerJobService.resumeSchedule(id);
         return ResponseEntity.ok().build();
     }
 }
