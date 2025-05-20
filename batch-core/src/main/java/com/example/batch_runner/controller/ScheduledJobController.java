@@ -13,25 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/jobs")
+@RequestMapping("/api/schedule")
 @RequiredArgsConstructor
-public class JobController {
+public class ScheduledJobController {
 
-    private final CustomJobRegistry jobRegistry;
     private final SchedulerJobService schedulerJobService;
-
-    /**
-     * batch 작업명 리스트 반환 API
-     */
-    @GetMapping("/batch")
-    public ResponseEntity<List<String>> getJobNames() {
-        return ResponseEntity.ok(new ArrayList<>(jobRegistry.getAllJobNames()));
-    }
 
     /**
      * schedule 작업 리스트 반환 API
      */
-    @GetMapping("/schedule")
+    @GetMapping
     public ResponseEntity<List<ScheduleInfoDto>> getScheduleJobList() {
         List<ScheduleInfoDto> scheduleInfoList = schedulerJobService.getScheduleInfoList();
         return ResponseEntity.ok(scheduleInfoList);
@@ -40,7 +31,7 @@ public class JobController {
     /**
      * schedule 작업 정보 생성 API
      */
-    @PostMapping(value = "/schedule", consumes = "application/json")
+    @PostMapping(consumes = "application/json")
     public ResponseEntity<Void> createScheduleInfo(@RequestBody SchedulerJobCreateDto createDto) {
         schedulerJobService.createScheduleInfo(createDto);
         return ResponseEntity.ok().build();
@@ -49,7 +40,7 @@ public class JobController {
     /**
      * schedule 작업 정보 변경 API
      */
-    @PutMapping(value = "/schedule/{id}", consumes = "application/json")
+    @PutMapping(value = "/{id}", consumes = "application/json")
     public ResponseEntity<Void> updateScheduleInfo(@PathVariable(name = "id") long id,
                                                    @RequestBody SchedulerJobUpdateDto updateDto) {
         schedulerJobService.updateScheduleInfo(id, updateDto);
@@ -59,7 +50,7 @@ public class JobController {
     /**
      * schedule 작업 정보 삭제 API
      */
-    @DeleteMapping("/schedule/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> updateScheduleInfo(@PathVariable(name = "id") long id) {
         schedulerJobService.deleteScheduleInfo(id);
         return ResponseEntity.ok().build();
