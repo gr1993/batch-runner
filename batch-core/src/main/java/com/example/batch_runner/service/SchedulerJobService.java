@@ -2,6 +2,8 @@ package com.example.batch_runner.service;
 
 import com.example.batch_runner.domain.SchedulerJob;
 import com.example.batch_runner.dto.ScheduleInfoDto;
+import com.example.batch_runner.dto.SchedulerJobUpdateDto;
+import com.example.batch_runner.job.quartz.BatchLaunchingJob;
 import com.example.batch_runner.repository.SchedulerJobRepository;
 import com.example.batch_runner.scheduler.QuartzService;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +12,13 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -59,6 +63,34 @@ public class SchedulerJobService {
             return scheduleInfoList;
         } catch (SchedulerException ex) {
             throw new RuntimeException("schedulerJob SchedulerException", ex);
+        }
+    }
+
+    /**
+     * 스케줄 JOB 정보 변경
+     */
+    @Transactional
+    public void updateScheduleInfo(long id, SchedulerJobUpdateDto updateDto) {
+        Optional<SchedulerJob> find = schedulerJobRepository.findById(id);
+        if (find.isEmpty()) {
+            return;
+        }
+
+        SchedulerJob schedulerJob = find.get();
+        schedulerJob.setCronExpression(updateDto.getCronExpression());
+        schedulerJob.setDescription(updateDto.getDescription());
+
+        // 스케줄러에 Job을 업데이트
+        try {
+            quartzService.addJob(
+                    BatchLaunchingJob.class,
+                    schedulerJob.getJobName(),
+                    schedulerJob.getDescription(),
+                    schedulerJob.getJobParamsJson(),
+                    schedulerJob.getCronExpression()
+            );
+        } catch (SchedulerException ex) {
+            throw new RuntimeException("Job Info Update Failed!", ex);
         }
     }
 }

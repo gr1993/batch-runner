@@ -37,16 +37,11 @@ public class QuartzService {
         List<SchedulerJob> jobList = jobRepository.findByUseYn("Y");
         for (SchedulerJob schedulerJob : jobList) {
             try {
-                Map<String, Object> jobParams = schedulerJob.getJobParamsJson();
-                if (jobParams == null) {
-                    jobParams = new HashMap<>();
-                }
-
                 addJob(
                     BatchLaunchingJob.class,
                     schedulerJob.getJobName(),
                     schedulerJob.getDescription(),
-                    jobParams,
+                    schedulerJob.getJobParamsJson(),
                     schedulerJob.getCronExpression()
                 );
             } catch (Exception ex) {
@@ -67,6 +62,11 @@ public class QuartzService {
             , String jobDescription
             , Map<String, Object> jobDataMap
             , String cronExpression) throws SchedulerException {
+
+        if (jobDataMap == null) {
+            jobDataMap = new HashMap<>();
+        }
+
         JobDetail jobDetail = buildJobDetail(jobClass, jobName, jobDescription, jobDataMap);
         Trigger trigger = buildCronTrigger(cronExpression, jobName + TRIGGER_POST_FIX);
 

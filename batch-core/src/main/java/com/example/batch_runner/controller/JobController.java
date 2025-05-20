@@ -2,12 +2,11 @@ package com.example.batch_runner.controller;
 
 import com.example.batch_runner.config.batch.CustomJobRegistry;
 import com.example.batch_runner.dto.ScheduleInfoDto;
+import com.example.batch_runner.dto.SchedulerJobUpdateDto;
 import com.example.batch_runner.service.SchedulerJobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,5 +34,15 @@ public class JobController {
     public ResponseEntity<List<ScheduleInfoDto>> getScheduleJobList() {
         List<ScheduleInfoDto> scheduleInfoList = schedulerJobService.getScheduleInfoList();
         return ResponseEntity.ok(scheduleInfoList);
+    }
+
+    /**
+     * schedule 작업 정보 변경 API
+     */
+    @PutMapping(value = "/schedule/{id}", consumes = "application/json")
+    public ResponseEntity<Void> updateScheduleInfo(@PathVariable(name = "id") long id,
+                                                   @RequestBody SchedulerJobUpdateDto updateDto) {
+        schedulerJobService.updateScheduleInfo(id, updateDto);
+        return ResponseEntity.ok().build();
     }
 }
