@@ -1,11 +1,10 @@
 package com.example.batch_runner.controller;
 
-import com.example.batch_runner.config.batch.CustomJobRegistry;
+import com.example.batch_runner.dto.JobHistoryResponseDto;
+import com.example.batch_runner.service.BatchService;
 import lombok.RequiredArgsConstructor;
-import org.quartz.JobExecutionException;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,15 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BatchJobController {
 
-    private final CustomJobRegistry jobRegistry;
-    private final JobLauncher jobLauncher;
+    private final BatchService batchService;
 
     /**
      * batch 작업명 리스트 반환 API
      */
     @GetMapping("/jobs")
     public ResponseEntity<List<String>> getJobNames() {
-        return ResponseEntity.ok(new ArrayList<>(jobRegistry.getAllJobNames()));
+        return ResponseEntity.ok(new ArrayList<>(batchService.getJobNames()));
     }
 
     /**
@@ -33,17 +31,19 @@ public class BatchJobController {
      */
     @PostMapping("/execute/{jobName}")
     public ResponseEntity<Void> executeJob(@PathVariable(value = "jobName") String jobName) {
-        Job batchJob = jobRegistry.getJob(jobName);
-
-        try {
-            JobParametersBuilder builder = new JobParametersBuilder()
-                    .addLong("time", System.currentTimeMillis());
-
-            jobLauncher.run(batchJob, builder.toJobParameters());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to run Spring Batch job", e);
-        }
-
+        batchService.executeJob(jobName);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * batch 작업 이력 조회 API
+     */
+    @GetMapping("/history/{jobName}")
+    public ResponseEntity<JobHistoryResponseDto> getJobHistory(@PathVariable(value = "jobName") String jobName,
+                                                               @RequestParam(value = "page") int page,
+                                                               @RequestParam(value = "pageSize") int pageSize) {
+
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return ResponseEntity.ok(batchService.getJobHistory(jobName, pageable));
     }
 }
