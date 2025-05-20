@@ -74,7 +74,7 @@ public class SchedulerJobService {
     public void createScheduleInfo(SchedulerJobCreateDto createDto) {
         Optional<SchedulerJob> find = schedulerJobRepository.findByJobName(createDto.getJobName());
         if (find.isPresent()) {
-            return;
+            throw new IllegalArgumentException("already exist job");
         }
 
         SchedulerJob schedulerJob = new SchedulerJob();
@@ -96,7 +96,7 @@ public class SchedulerJobService {
     public void updateScheduleInfo(long id, SchedulerJobUpdateDto updateDto) {
         Optional<SchedulerJob> find = schedulerJobRepository.findById(id);
         if (find.isEmpty()) {
-            return;
+            throw new IllegalArgumentException("not exist job");
         }
 
         SchedulerJob schedulerJob = find.get();
@@ -105,6 +105,23 @@ public class SchedulerJobService {
 
         // 스케줄러에 Job을 업데이트
         upsertJobInQuartz(schedulerJob);
+    }
+
+    /**
+     * 스케줄 JOB 정보 삭제
+     */
+    @Transactional
+    public void deleteScheduleInfo(long id) {
+        Optional<SchedulerJob> find = schedulerJobRepository.findById(id);
+        if (find.isEmpty()) {
+            throw new IllegalArgumentException("not exist job");
+        }
+
+        SchedulerJob schedulerJob = find.get();
+        // 스케줄러에서 Job을 제거
+        quartzService.deleteJob(schedulerJob.getJobName());
+
+        schedulerJobRepository.delete(schedulerJob);
     }
 
     private void upsertJobInQuartz(SchedulerJob schedulerJob) {

@@ -109,6 +109,17 @@ public class QuartzService {
         }
     }
 
+    /**
+     * 스케줄러에서 Job을 삭제(메타테이블 정보도 같이 제거됨)
+     */
+    public void deleteJob(String jobName) {
+        try {
+            scheduler.deleteJob(new JobKey(jobName, JOB_GROUP));
+        } catch (SchedulerException e) {
+            throw new RuntimeException("Failed to delete job: " + jobName, e);
+        }
+    }
+
     private JobDetail buildJobDetail(Class<? extends Job> job
             , String name
             , String desc

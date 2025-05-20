@@ -55,4 +55,13 @@ public class JobController {
         schedulerJobService.updateScheduleInfo(id, updateDto);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * schedule 작업 정보 삭제 API
+     */
+    @DeleteMapping("/schedule/{id}")
+    public ResponseEntity<Void> updateScheduleInfo(@PathVariable(name = "id") long id) {
+        schedulerJobService.deleteScheduleInfo(id);
+        return ResponseEntity.ok().build();
+    }
 }
