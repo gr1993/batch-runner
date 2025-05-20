@@ -1,15 +1,12 @@
 package com.example.batch_runner.job.quartz;
 
 import com.example.batch_runner.config.batch.CustomJobRegistry;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.springframework.batch.core.JobParameters;
+import org.quartz.*;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@DisallowConcurrentExecution
 public class BatchLaunchingJob implements Job {
 
     @Autowired
