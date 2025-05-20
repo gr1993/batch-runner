@@ -2,6 +2,7 @@ package com.example.batch_runner.controller;
 
 import com.example.batch_runner.config.batch.CustomJobRegistry;
 import com.example.batch_runner.dto.ScheduleInfoDto;
+import com.example.batch_runner.dto.SchedulerJobCreateDto;
 import com.example.batch_runner.dto.SchedulerJobUpdateDto;
 import com.example.batch_runner.service.SchedulerJobService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,15 @@ public class JobController {
     public ResponseEntity<List<ScheduleInfoDto>> getScheduleJobList() {
         List<ScheduleInfoDto> scheduleInfoList = schedulerJobService.getScheduleInfoList();
         return ResponseEntity.ok(scheduleInfoList);
+    }
+
+    /**
+     * schedule 작업 정보 생성 API
+     */
+    @PostMapping(value = "/schedule", consumes = "application/json")
+    public ResponseEntity<Void> createScheduleInfo(@RequestBody SchedulerJobCreateDto createDto) {
+        schedulerJobService.createScheduleInfo(createDto);
+        return ResponseEntity.ok().build();
     }
 
     /**

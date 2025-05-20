@@ -2,6 +2,7 @@ package com.example.batch_runner.service;
 
 import com.example.batch_runner.domain.SchedulerJob;
 import com.example.batch_runner.dto.ScheduleInfoDto;
+import com.example.batch_runner.dto.SchedulerJobCreateDto;
 import com.example.batch_runner.dto.SchedulerJobUpdateDto;
 import com.example.batch_runner.job.quartz.BatchLaunchingJob;
 import com.example.batch_runner.repository.SchedulerJobRepository;
@@ -36,7 +37,7 @@ public class SchedulerJobService {
      */
     public List<ScheduleInfoDto> getScheduleInfoList() {
         try {
-            List<SchedulerJob> jobList = schedulerJobRepository.findByUseYn("Y");
+            List<SchedulerJob> jobList = schedulerJobRepository.findAllByUseYn("Y");
             List<ScheduleInfoDto> scheduleInfoList = new ArrayList<>();
             for (SchedulerJob job : jobList) {
                 ScheduleInfoDto scheduleInfoDto = new ScheduleInfoDto();
@@ -67,6 +68,28 @@ public class SchedulerJobService {
     }
 
     /**
+     * 스케줄 JOB 정보 등록
+     */
+    @Transactional
+    public void createScheduleInfo(SchedulerJobCreateDto createDto) {
+        Optional<SchedulerJob> find = schedulerJobRepository.findByJobName(createDto.getJobName());
+        if (find.isPresent()) {
+            return;
+        }
+
+        SchedulerJob schedulerJob = new SchedulerJob();
+        schedulerJob.setJobName(createDto.getJobName());
+        schedulerJob.setJobGroup(QuartzService.JOB_GROUP);
+        schedulerJob.setCronExpression(createDto.getCronExpression());
+        schedulerJob.setDescription(createDto.getDescription());
+        schedulerJob.setUseYn("Y");
+        schedulerJobRepository.save(schedulerJob);
+
+        // 스케줄러에 job을 등록
+        upsertJobInQuartz(schedulerJob);
+    }
+    
+    /**
      * 스케줄 JOB 정보 변경
      */
     @Transactional
@@ -81,6 +104,10 @@ public class SchedulerJobService {
         schedulerJob.setDescription(updateDto.getDescription());
 
         // 스케줄러에 Job을 업데이트
+        upsertJobInQuartz(schedulerJob);
+    }
+
+    private void upsertJobInQuartz(SchedulerJob schedulerJob) {
         try {
             quartzService.addJob(
                     BatchLaunchingJob.class,

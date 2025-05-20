@@ -22,7 +22,7 @@ public class QuartzService {
     private final SchedulerJobRepository jobRepository;
     private final Scheduler scheduler;
 
-    private static final String JOB_GROUP = "jobGroup";
+    public static final String JOB_GROUP = "jobGroup";
     private static final String TRIGGER_GROUP = "triggerGroup";
     private static final String TRIGGER_POST_FIX = "Trigger";
 
@@ -34,7 +34,7 @@ public class QuartzService {
     public void init() throws SchedulerException {
         scheduler.clear();
 
-        List<SchedulerJob> jobList = jobRepository.findByUseYn("Y");
+        List<SchedulerJob> jobList = jobRepository.findAllByUseYn("Y");
         for (SchedulerJob schedulerJob : jobList) {
             try {
                 addJob(
