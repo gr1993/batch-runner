@@ -1,3 +1,4 @@
+-- 노선별 정류소 정보 테이블
 CREATE TABLE route_stop_info (
     route_id     VARCHAR(20),
     route_name   VARCHAR(100),
@@ -61,3 +62,36 @@ COMMENT ON COLUMN scheduler_job.updated_at IS '수정 일시';
 
 -- scheduler_job 테이블 인덱스 추가
 ALTER TABLE scheduler_job ADD CONSTRAINT uq_job_name_group UNIQUE (job_name, job_group);
+
+
+-- 노선별 버스 실시간 위치 테이블
+CREATE TABLE route_bus_pos (
+    veh_id BIGINT PRIMARY KEY,
+    route_id VARCHAR(255),
+    plain_no VARCHAR(255),
+    congetion INTEGER,
+    pos_x NUMERIC(10, 7),
+    pos_y NUMERIC(10, 7)
+);
+
+COMMENT ON TABLE route_bus_pos IS '노선별 버스 실시간 위치 테이블';
+
+COMMENT ON COLUMN route_bus_pos.veh_id IS '버스 ID';
+COMMENT ON COLUMN route_bus_pos.route_id IS '노선 ID';
+COMMENT ON COLUMN route_bus_pos.plain_no IS '차량 번호';
+COMMENT ON COLUMN route_bus_pos.congetion IS '차량 내부 혼잡도 (0: 없음, 3: 여유, 4: 보통, 5: 혼잡, 6: 매우혼잡)';
+COMMENT ON COLUMN route_bus_pos.pos_x IS '맵매칭X좌표 (gpsX)';
+COMMENT ON COLUMN route_bus_pos.pos_y IS '맵매칭Y좌표 (gpsY)';
+
+-- route_bus_pos 테이블 인덱스 추가
+CREATE INDEX idx_route_bus_pos_route_id ON route_bus_pos(route_id);
+
+
+-- 즐겨찾기 노선 등록 테이블
+CREATE TABLE favorite_route (
+    route_id VARCHAR(50) PRIMARY KEY
+);
+
+COMMENT ON TABLE favorite_route IS '즐겨찾기 노선 등록 테이블';
+
+COMMENT ON COLUMN favorite_route.route_id IS '노션 ID';
