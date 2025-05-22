@@ -23,30 +23,63 @@
     <!-- appkey : JavaScript 키 (또한 웹 플랫폼에 사이트 도메인도 등록되어 있어야 함) -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2b9896e6862ec303926139e843ab9a4e"></script>
     <script>
+        var map;
+
         document.addEventListener("DOMContentLoaded", function() {
+            // 지도 생성
+            var container = document.getElementById('map');
+            var options = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667),
+                level: 3
+            };
+            map = new kakao.maps.Map(container, options);
+
+            // 브라우저의 위치 정보기능 여부 확인
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(getCurrentPos);
             } else {
                 alert("이 브라우저는 Geolocation을 지원하지 않습니다.");
             }
+
+            // 클릭 이벤트 등록
+            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                var position = mouseEvent.latLng;
+                addMarker(position, 'stop');
+            });
         });
 
+        // 사용자의 위치 정보를 가져온 경우 호출
         function getCurrentPos(position) {
             // 현재 위치의 위도, 경도
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
 
-            var container = document.getElementById('map');
-            var options = {
-                center: new kakao.maps.LatLng(lat, lon),
-                level: 3
-            };
+            var position = new kakao.maps.LatLng(lat, lon); // 마커 위치 (현재 위치)
+            addMarker(position);
 
-            var map = new kakao.maps.Map(container, options);
+            // 좌표로 지도 이동
+            map.setCenter(position);
+        }
 
-            var marker = new kakao.maps.Marker({
-                position: new kakao.maps.LatLng(lat, lon) // 마커 위치 (현재 위치)
-            });
+        // 지도에 마커를 표시 (카카오가 마커이미지를 공식적으로 제공하는 것은 아니라 샘플을 확인할 수 있는 사이트는 존재하지 않음)
+        // 직접 이미지를 다운로드 받아서 정적리소스로 활용 (다운로드 링크 : https://www.flaticon.com/search?word=bus)
+        var bugImage = "/image/bus.png";
+        var stopImage = "/image/bus-stop.png";
+        function addMarker(position, type) {
+            var markerOption = { position };
+
+            if (type) {
+                var image = bugImage;
+                switch(type) {
+                    case 'stop' : image = stopImage; break;
+                }
+
+                var imageSize = new kakao.maps.Size(35, 35);
+                var markerImage = new kakao.maps.MarkerImage(image, imageSize);
+                markerOption.image = markerImage;
+            }
+
+            var marker = new kakao.maps.Marker(markerOption);
             marker.setMap(map);
         }
 

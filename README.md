@@ -90,3 +90,6 @@ Quartz를 사용한 이유는 다중 배치서버에서 스케줄 Job의 실행 
 * 서울시 버스정류소 위치정보(사용안함)
 	* 문서 링크 : https://data.seoul.go.kr/dataList/OA-15067/S/1/datasetView.do
 	* xlsx 파일 제공
+
+### 카카오 맵 API
+* 문서 링크 : https://apis.map.kakao.com/web/documentation/
