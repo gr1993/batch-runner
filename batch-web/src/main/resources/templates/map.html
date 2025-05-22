@@ -77,7 +77,7 @@
                 });
 
                 const markers = busStopData.map(stop => {
-                    var marker = createMarker(new kakao.maps.LatLng(stop.lat, stop.lng), 'stop');
+                    var marker = createMarker(new kakao.maps.LatLng(stop.lat, stop.lng), 'stop', stop.nodeName);
 
                     kakao.maps.event.addListener(marker, 'click', function() {
                         //showBusStopInfo(stop);

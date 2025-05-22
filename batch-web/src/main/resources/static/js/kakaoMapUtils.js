@@ -4,7 +4,7 @@
 // 직접 이미지를 다운로드 받아서 정적리소스로 활용 (다운로드 링크 : https://www.flaticon.com/search?word=bus)
 var bugImage = "/image/bus.png";
 var stopImage = "/image/bus-stop.png";
-function createMarker(position, type) {
+function createMarker(position, type, title) {
     var markerOption = { position };
 
     if (type) {
@@ -16,6 +16,10 @@ function createMarker(position, type) {
         var imageSize = new kakao.maps.Size(35, 35);
         var markerImage = new kakao.maps.MarkerImage(image, imageSize);
         markerOption.image = markerImage;
+    }
+
+    if (title) {
+        markerOption.title = title; // 마우스 오버 시 표시될 텍스트
     }
 
     var marker = new kakao.maps.Marker(markerOption);
