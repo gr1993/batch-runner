@@ -1,6 +1,7 @@
 package com.example.batch_runner.job.batch;
 
 import com.example.batch_runner.domain.RouteStopInfo;
+import com.example.batch_runner.domain.RouteStopInfoId;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class RouteStopExcelJobConfig {
     // 변경 빈도가 낮아서(예: 10% 미만 변경) 차등 갱신이 완전 덮어쓰기보다 효율적이라고 판단함
     // 엑셀 데이터를 모두 읽은 후, DB에서 엑셀에 없는 ID를 찾아 DELETE(별도의 Step)
     @Bean
-    public Job routeStopExcelJob(Set<String> validRouteStopKeys) {
+    public Job routeStopExcelJob(Set<RouteStopInfoId> validRouteStopKeys) {
         return new JobBuilder("routeStopExcelJob", jobRepository)
                 .start(routeStopExcelStep(validRouteStopKeys))
                 .next(deleteMissingRouteStopsStep(validRouteStopKeys))
@@ -51,7 +52,7 @@ public class RouteStopExcelJobConfig {
     }
 
     @Bean
-    public Step routeStopExcelStep(Set<String> validRouteStopKeys) {
+    public Step routeStopExcelStep(Set<RouteStopInfoId> validRouteStopKeys) {
         return new StepBuilder("routeStopExcelStep", jobRepository)
                 .<RouteStopInfo, RouteStopInfo>chunk(CHUNK_SIZE, transactionManager)
                 .reader(routeStopExcelItemReader())
@@ -73,9 +74,8 @@ public class RouteStopExcelJobConfig {
         return (rs) -> {
             String[] row = rs.getCurrentRow();
             RouteStopInfo routeStop = new RouteStopInfo();
-            routeStop.setRouteId(row[0]);
+            routeStop.setId(new RouteStopInfoId(row[0], Integer.valueOf(row[2])));
             routeStop.setRouteName(row[1]);
-            routeStop.setNodeSeq(Integer.valueOf(row[2]));
             routeStop.setNodeId(row[3]);
             routeStop.setArsId(row[4]);
             routeStop.setNodeName(row[5]);
@@ -86,10 +86,9 @@ public class RouteStopExcelJobConfig {
     }
 
     @Bean
-    public ItemProcessor<RouteStopInfo, RouteStopInfo> routeStopExcelItemProcessor(Set<String> validRouteStopKeys) {
+    public ItemProcessor<RouteStopInfo, RouteStopInfo> routeStopExcelItemProcessor(Set<RouteStopInfoId> validRouteStopKeys) {
         return item -> {
-            String key = item.getRouteId() + "_" + item.getNodeSeq();
-            validRouteStopKeys.add(key);
+            validRouteStopKeys.add(item.getId());
             return item;
         };
     }
@@ -122,7 +121,7 @@ public class RouteStopExcelJobConfig {
      * 엑셀에 없는 항목 삭제 Step
      */
     @Bean
-    public Step deleteMissingRouteStopsStep(Set<String> validRouteStopKeys) {
+    public Step deleteMissingRouteStopsStep(Set<RouteStopInfoId> validRouteStopKeys) {
         return new StepBuilder("deleteMissingRouteStopsStep", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     log.info("[deleteMissingRouteStopsStep] : 엑셀 ROW 수 {} 건", validRouteStopKeys.size());
@@ -133,8 +132,7 @@ public class RouteStopExcelJobConfig {
                     List<RouteStopInfo> allFromDb = em.createQuery("SELECT r FROM RouteStopInfo r", RouteStopInfo.class).getResultList();
 
                     for (RouteStopInfo item : allFromDb) {
-                        String key = item.getRouteId() + "_" + item.getNodeSeq();
-                        if (!validRouteStopKeys.contains(key)) {
+                        if (!validRouteStopKeys.contains(item.getId())) {
                             em.remove(em.contains(item) ? item : em.merge(item));
                         }
                     }

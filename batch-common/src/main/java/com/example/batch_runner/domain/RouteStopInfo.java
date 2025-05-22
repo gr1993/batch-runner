@@ -1,6 +1,7 @@
 package com.example.batch_runner.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
@@ -9,14 +10,11 @@ import lombok.Data;
 @Entity
 public class RouteStopInfo {
 
-    @Id
-    private String routeId;
+    @EmbeddedId
+    private RouteStopInfoId id;
 
     @Column
     private String routeName;
-
-    @Id
-    private Integer nodeSeq;
 
     @Column
     private String nodeId;
