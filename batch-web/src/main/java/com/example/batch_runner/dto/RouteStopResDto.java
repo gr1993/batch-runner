@@ -12,8 +12,8 @@ public class RouteStopResDto {
     private String nodeId;
     private String arsId;
     private String nodeName;
-    private Double posX;
-    private Double posY;
+    private Double lat;
+    private Double lng;
 
     public static RouteStopResDto fromEntity(RouteStopInfo entity) {
         RouteStopResDto dto = new RouteStopResDto();
@@ -23,8 +23,8 @@ public class RouteStopResDto {
         dto.setNodeId(entity.getNodeId());
         dto.setArsId(entity.getArsId());
         dto.setNodeName(entity.getNodeName());
-        dto.setPosX(entity.getPosX());
-        dto.setPosY(entity.getPosY());
+        dto.setLat(entity.getPosY());
+        dto.setLng(entity.getPosX());
         return dto;
     }
 }
