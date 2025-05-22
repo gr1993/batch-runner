@@ -16,6 +16,8 @@ public class RouteStopInfoId implements Serializable {
     private String routeId;
     private Integer nodeSeq;
 
+    public RouteStopInfoId() {}
+
     public RouteStopInfoId(String routeId, Integer nodeSeq) {
         this.routeId = routeId;
         this.nodeSeq = nodeSeq;
