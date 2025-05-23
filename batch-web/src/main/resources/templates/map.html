@@ -23,7 +23,12 @@
             <div class="info-panel hidden" id="info-panel">
                 <button class="close-btn" onclick="hideInfoPanel()">×</button>
                 <div id="info-content">
-                    <h3 id="stop-title"></h3>
+                    <div style="display: flex; align-items: center;">
+                        <svg id="favorite-icon" class="favorite-icon" onclick="toggleFavorite()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon class="star-shape" points="12 2 15 8.5 22 9.3 17 14 18.5 21 12 17.8 5.5 21 7 14 2 9.3 9 8.5 12 2"/>
+                        </svg>
+                        <h3 id="stop-title" style="margin-left: 8px;"></h3>
+                    </div>
                     <hr/>
                     <div id="route-badges" class="badge-container"></div>
                     <div  id="busArrivalsContainer" class="bus-arrivals"></div>
@@ -236,6 +241,28 @@
         // 정보 패널 닫기
         function hideInfoPanel() {
             document.getElementById('info-panel').classList.add('hidden');
+        }
+
+        function toggleFavorite() {
+            const icon = document.getElementById('favorite-icon');
+            const isFavorited = icon.classList.toggle('favorited');
+
+            const stopId = document.getElementById('stop-title').dataset.stopId;
+            if (isFavorited) {
+                addToFavorites(stopId);
+            } else {
+                removeFromFavorites(stopId);
+            }
+        }
+
+        function addToFavorites(stopId) {
+            // 로컬스토리지 또는 서버 연동 로직
+            console.log(`Added stop ${stopId} to favorites.`);
+        }
+
+        function removeFromFavorites(stopId) {
+            // 로컬스토리지 또는 서버 연동 로직
+            console.log(`Removed stop ${stopId} from favorites.`);
         }
     </script>
 

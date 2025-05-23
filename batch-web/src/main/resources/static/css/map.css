@@ -120,3 +120,24 @@
   color: #3498db;
   font-size: 14px;
 }
+
+
+.favorite-icon {
+    cursor: pointer;
+    stroke: black;
+    stroke-width: 2;
+    transition: fill 0.2s;
+}
+
+.favorite-icon .star-shape {
+    fill: none;
+    transition: fill 0.2s;
+}
+
+.favorite-icon.favorited .star-shape {
+    fill: gold;
+}
+
+.favorite-icon.favorited {
+    stroke: gold;
+}
