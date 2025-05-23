@@ -2,13 +2,11 @@ package com.example.batch_runner.controller;
 
 import com.example.batch_runner.dto.RouteInfoDto;
 import com.example.batch_runner.dto.RouteStopResDto;
+import com.example.batch_runner.external.dto.BusArrivalInfoDto;
 import com.example.batch_runner.service.MapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +39,16 @@ public class MapApiController {
     @GetMapping("routes/{routeId}/stops")
     public ResponseEntity<List<RouteStopResDto>> getStopListByRouteId(@PathVariable("routeId") String routeId) {
         return ResponseEntity.ok(mapService.getStopListByRouteId(routeId));
+    }
+
+    /**
+     * 특정 정류장의 도착 시간 정보 조회
+     */
+    @GetMapping("stop/arrival")
+    public ResponseEntity<List<BusArrivalInfoDto>> getBusArrivalInfoList(@RequestParam("nodeId") String nodeId,
+                                                                         @RequestParam("routeId") String routeId,
+                                                                         @RequestParam("nodeSeq") String nodeSeq) {
+        return ResponseEntity.ok(mapService.getBusArrivalInfoList(nodeId, routeId, nodeSeq));
     }
 
 }

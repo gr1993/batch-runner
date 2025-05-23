@@ -8,9 +8,10 @@ function get(url, callback) {
         'Content-Type': 'application/json',
       }
     })
-    .then(response => response.json())
-    .then(data => {
-      if (callback) callback(data);
+    .then(response => response.text())
+    .then(text => {
+        const data = text ? JSON.parse(text) : [];
+        if (callback) callback(data);
     })
     .catch(error => console.error(error));
 }

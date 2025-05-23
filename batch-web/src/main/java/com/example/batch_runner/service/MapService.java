@@ -3,8 +3,12 @@ package com.example.batch_runner.service;
 import com.example.batch_runner.domain.RouteStopInfo;
 import com.example.batch_runner.dto.RouteInfoDto;
 import com.example.batch_runner.dto.RouteStopResDto;
+import com.example.batch_runner.external.client.RestApiClient;
+import com.example.batch_runner.external.dto.BaiServiceResult;
+import com.example.batch_runner.external.dto.BusArrivalInfoDto;
 import com.example.batch_runner.repository.RouteStopInfoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +19,10 @@ import java.util.List;
 public class MapService {
 
     private final RouteStopInfoRepository routeStopInfoRepository;
+    private final RestApiClient restApiClient;
+
+    @Value("${app.serviceKey}")
+    private String serviceKey;
 
     public List<RouteStopResDto> getRouteStopResList() {
         List<RouteStopInfo> routeStopInfoList = routeStopInfoRepository.findAll();
@@ -41,5 +49,14 @@ public class MapService {
             result.add(RouteStopResDto.fromEntity(routeStopInfo));
         }
         return result;
+    }
+
+    public List<BusArrivalInfoDto> getBusArrivalInfoList(String nodeId, String routeId, String nodeSeq) {
+        String url = String.format(
+            "http://ws.bus.go.kr/api/rest/arrive/getArrInfoByRoute?serviceKey=%s&stId=%s&busRouteId=%s&ord=%s",
+            serviceKey, nodeId, routeId, nodeSeq
+        );
+        BaiServiceResult response = restApiClient.get(url, BaiServiceResult.class);
+        return response.getMsgBody().getItemList();
     }
 }

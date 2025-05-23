@@ -27,6 +27,8 @@ dependencies {
 
 	runtimeOnly 'org.postgresql:postgresql'
 
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
+
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 

@@ -26,22 +26,7 @@
                     <h3 id="stop-title"></h3>
                     <hr/>
                     <div id="route-badges" class="badge-container"></div>
-                    <div class="bus-arrivals">
-                        <div class="bus-card">
-                            <div class="bus-number">100</div>
-                            <div class="arrival-info">5분 후 도착</div>
-                        </div>
-
-                        <div class="bus-card">
-                            <div class="bus-number">100</div>
-                            <div class="arrival-info">5분 후 도착</div>
-                        </div>
-
-                        <div class="bus-card">
-                            <div class="bus-number">100</div>
-                            <div class="arrival-info">5분 후 도착</div>
-                        </div>
-                    </div>
+                    <div  id="busArrivalsContainer" class="bus-arrivals"></div>
                 </div>
             </div>
         </div>
@@ -50,7 +35,7 @@
     <!-- appkey : JavaScript 키 (또한 웹 플랫폼에 사이트 도메인도 등록되어 있어야 함) -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2b9896e6862ec303926139e843ab9a4e&libraries=clusterer"></script>
     <script type="text/javascript" src="/js/kakaoMapUtils.js"></script>
-    <script type="text/javascript" src="/js/httpClient.js"></script>
+    <script type="text/javascript" src="/js/httpClient.js?v=1"></script>
     <script>
         var map;
         var minLevel = 6;  // 지도에 클러스터 할 최소 지도 레벨
@@ -158,7 +143,13 @@
                 const badgeContainer = document.getElementById('route-badges');
 
                 badgeContainer.innerHTML = routeList.map(route => `
-                    <span class="route-badge" onclick="clickRoute('${route.routeId}', this)">${route.routeName}</span>
+                    <span
+                        class="route-badge"
+                        onclick="clickRoute(this)"
+                        data-routeId="${route.routeId}"
+                        data-nodeId="${stop.nodeId}"
+                        data-nodeSeq="${stop.nodeSeq}"
+                    >${route.routeName}</span>
                 `).join('');
 
                 // 정표 패널 표출
@@ -167,7 +158,11 @@
         }
 
         // 정보패널에서 노선 선택
-        function clickRoute(routeId, clickedElement) {
+        function clickRoute(clickedElement) {
+            var routeId = clickedElement.getAttribute('data-routeId');
+            var nodeId = clickedElement.getAttribute('data-nodeId');
+            var nodeSeq = clickedElement.getAttribute('data-nodeSeq');
+
             // 같은 노선 다시 클릭하면 무시
             if (routeId === currentRouteId) return;
             currentRouteId = routeId;
@@ -176,6 +171,16 @@
                 el.classList.remove("selected");
             });
             clickedElement.classList.add("selected");
+
+            // 해당 노선의 폴리라인 그리기
+            drawPolylineByRoute(routeId);
+
+            // 해당 노선의 버스 도착 정보 표시
+            setBusArrivalInfo(nodeId, routeId, nodeSeq);
+        }
+
+        // 선택된 정류장의 노선 라인 그리기
+        function drawPolylineByRoute(routeId) {
 
             // 이전 폴리라인 제거
             if (currentPolyline) {
@@ -206,6 +211,20 @@
 
                     label.setMap(map);
                 });
+            });
+        }
+
+        // 해당 노선의 버스 도착 정보 표시
+        function setBusArrivalInfo(nodeId, routeId, nodeSeq) {
+            const container = document.getElementById('busArrivalsContainer');
+
+            get(`/api/map/stop/arrival?nodeId=${nodeId}&routeId=${routeId}&nodeSeq=${nodeSeq}`, function(busArrivalInfoList) {
+                container.innerHTML = busArrivalInfoList.map((arrivalInfo) => `
+                    <div class="bus-card">
+                        <div class="bus-number">${arrivalInfo.busRouteAbrv}</div>
+                        <div class="arrival-info">${arrivalInfo.arrmsg1}</div>
+                    </div>
+                `).join('');
             });
         }
 
