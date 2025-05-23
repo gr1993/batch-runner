@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,20 +39,18 @@ public class MapService {
 
     public List<RouteInfoDto> getRouteIntoListByNodeId(String nodeId) {
         List<RouteStopInfo> routeStopInfoList = routeStopInfoRepository.findAllByNodeId(nodeId);
-        List<RouteInfoDto> result = new ArrayList<>();
-        for (RouteStopInfo routeStopInfo : routeStopInfoList) {
-            result.add(new RouteInfoDto(routeStopInfo.getId().getRouteId(), routeStopInfo.getRouteName(), routeStopInfo.getId().getNodeSeq()));
-        }
-        return result;
+
+        return routeStopInfoList.stream()
+                .map(stop -> new RouteInfoDto(stop.getId().getRouteId(), stop.getRouteName(), stop.getId().getNodeSeq()))
+                .collect(Collectors.toList());
     }
 
     public List<RouteStopResDto> getStopListByRouteId(String routeId) {
         List<RouteStopInfo> routeStopInfoList =routeStopInfoRepository.findAllByIdRouteIdOrderByIdNodeSeqAsc(routeId);
-        List<RouteStopResDto> result = new ArrayList<>();
-        for (RouteStopInfo routeStopInfo : routeStopInfoList) {
-            result.add(RouteStopResDto.fromEntity(routeStopInfo));
-        }
-        return result;
+
+        return routeStopInfoList.stream()
+                .map(RouteStopResDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public List<BusArrivalInfoDto> getBusArrivalInfoList(String nodeId, String routeId, String nodeSeq) {
