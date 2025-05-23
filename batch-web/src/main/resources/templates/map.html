@@ -38,8 +38,9 @@
     <script>
         var map;
         var minLevel = 6;  // 지도에 클러스터 할 최소 지도 레벨
+        var clusterer;
         var currentPolyline = null;  // 전역 변수로 선언 (이전 폴리라인 추적)
-        let currentRouteId = null;  // 선택된 노선 ID
+        var currentRouteId = null;  // 선택된 노선 ID
 
         document.addEventListener("DOMContentLoaded", function() {
             // 지도 생성
@@ -96,24 +97,35 @@
         function loadAllBusStop() {
             get('/api/map/stop', function(busStopData) {
 
-                const clusterer = new kakao.maps.MarkerClusterer({
+                clusterer = new kakao.maps.MarkerClusterer({
                     map: map,
                     averageCenter: true,
                     minLevel: minLevel
                 });
 
-                const markers = busStopData.map(stop => {
-                    var marker = createMarker(new kakao.maps.LatLng(stop.lat, stop.lng), 'stop', stop.nodeName);
+                const markers = chunkedAddMarkersToClusterer(busStopData);
+            });
+        }
 
-                    kakao.maps.event.addListener(marker, 'click', function() {
-                        showBusStopInfo(stop);
-                    });
+        // 4만 개 이상 마커를 한번에 생성하면 오래 걸리므로 500개씩 나누어 생성 (지도 UI 멈춤 방지)
+        function chunkedAddMarkersToClusterer(data, chunkSize = 500) {
+            let i = 0;
 
-                    return marker;
+            function processChunk() {
+                const end = Math.min(i + chunkSize, data.length);
+                const chunk = data.slice(i, end).map(stop => {
+                    return createMarker(new kakao.maps.LatLng(stop.lat, stop.lng), 'stop', stop.nodeName);
                 });
 
-                clusterer.addMarkers(markers);
-            });
+                clusterer.addMarkers(chunk);
+                i = end;
+
+                if (i < data.length) {
+                    setTimeout(processChunk, 0); // 다음 chunk
+                }
+            }
+
+            processChunk();
         }
 
         function showBusStopInfo(stop) {
