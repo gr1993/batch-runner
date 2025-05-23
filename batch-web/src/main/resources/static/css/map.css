@@ -72,6 +72,13 @@
   background-color: #e0e0e0;
 }
 
+.route-badge.selected {
+  background-color: #3498db;
+  color: white;
+  font-weight: bold;
+  border: 1px solid #2980b9;
+}
+
 
 .marker-label {
   background: #FF69B4;
@@ -84,4 +91,32 @@
   z-index: 1000;
   position: relative;
   white-space: nowrap;
+}
+
+
+.bus-arrivals {
+    margin-top: 20px;
+}
+
+.bus-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.bus-number {
+  font-weight: bold;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.arrival-info {
+  color: #3498db;
+  font-size: 14px;
 }
