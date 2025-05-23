@@ -114,7 +114,12 @@
             function processChunk() {
                 const end = Math.min(i + chunkSize, data.length);
                 const chunk = data.slice(i, end).map(stop => {
-                    return createMarker(new kakao.maps.LatLng(stop.lat, stop.lng), 'stop', stop.nodeName);
+                    var marker = createMarker(new kakao.maps.LatLng(stop.lat, stop.lng), 'stop', stop.nodeName);
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                        showBusStopInfo(stop);
+                    });
+
+                    return marker;
                 });
 
                 clusterer.addMarkers(chunk);
