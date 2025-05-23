@@ -47,3 +47,27 @@
 .close-btn:hover {
   color: #000;
 }
+
+
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.route-badge {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: default;
+  transition: background-color 0.2s ease;
+  border: 1px solid #ccc;
+}
+
+.route-badge:hover {
+  background-color: #e0e0e0;
+}

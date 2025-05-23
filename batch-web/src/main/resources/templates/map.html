@@ -6,7 +6,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/map.css?v=1">
+    <link rel="stylesheet" href="/css/map.css?v=2">
 </head>
 <body>
     <div class="sidebar">
@@ -23,7 +23,9 @@
             <div class="info-panel hidden" id="info-panel">
                 <button class="close-btn" onclick="hideInfoPanel()">×</button>
                 <div id="info-content">
-                    <p>정류소를 클릭하면 정보가 여기에 표시됩니다.</p>
+                    <h3 id="stop-title"></h3>
+                    <hr/>
+                    <div id="route-badges" class="badge-container"></div>
                 </div>
             </div>
         </div>
@@ -101,16 +103,20 @@
         }
 
         function showBusStopInfo(stop) {
-          const content = document.getElementById('info-content');
-          content.innerHTML = `
-            <h3>${stop.nodeName}</h3>
-            <p>노선명: ${stop.routeName}</p>
-            <p>ARS ID: ${stop.arsId}</p>
-            <p>위도: ${stop.lat}</p>
-            <p>경도: ${stop.lng}</p>
-          `;
+            const title = document.getElementById('stop-title');
+            title.textContent = `(${stop.arsId}) ${stop.nodeName}`;
 
-          showInfoPanel();
+            // 해당 정류소의 노선 리스트 조회
+            get(`/api/map/stop/${stop.nodeId}/routes`, function(routeList) {
+                const badgeContainer = document.getElementById('route-badges');
+
+                badgeContainer.innerHTML = routeList.map(route => `
+                    <span class="route-badge">${route.routeName}</span>
+                `).join('');
+
+                // 정표 패널 표출
+                showInfoPanel();
+            });
         }
 
         // 정보 패널 열기
