@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,18 +27,22 @@ public class MapService {
 
     public List<RouteStopResDto> getRouteStopResList() {
         List<RouteStopInfo> routeStopInfoList = routeStopInfoRepository.findAll();
-        List<RouteStopResDto> result = new ArrayList<>();
-        for (RouteStopInfo routeStopInfo : routeStopInfoList) {
-            result.add(RouteStopResDto.fromEntity(routeStopInfo));
-        }
-        return result;
+
+        // 다른 노선에 같은 정류장이 있을 수 있으므로 nodeId로 그룹핑
+        return routeStopInfoList.stream()
+                .collect(Collectors.groupingBy(RouteStopInfo::getNodeId))
+                .values()
+                .stream()
+                .map(list -> list.get(0))
+                .map(RouteStopResDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public List<RouteInfoDto> getRouteIntoListByNodeId(String nodeId) {
         List<RouteStopInfo> routeStopInfoList = routeStopInfoRepository.findAllByNodeId(nodeId);
         List<RouteInfoDto> result = new ArrayList<>();
         for (RouteStopInfo routeStopInfo : routeStopInfoList) {
-            result.add(new RouteInfoDto(routeStopInfo.getId().getRouteId(), routeStopInfo.getRouteName()));
+            result.add(new RouteInfoDto(routeStopInfo.getId().getRouteId(), routeStopInfo.getRouteName(), routeStopInfo.getId().getNodeSeq()));
         }
         return result;
     }
