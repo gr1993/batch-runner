@@ -71,3 +71,17 @@
 .route-badge:hover {
   background-color: #e0e0e0;
 }
+
+
+.marker-label {
+  background: #FF69B4;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  z-index: 1000;
+  position: relative;
+  white-space: nowrap;
+}

@@ -6,7 +6,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/map.css?v=2">
+    <link rel="stylesheet" href="/css/map.css?v=3">
 </head>
 <body>
     <div class="sidebar">
@@ -37,6 +37,9 @@
     <script type="text/javascript" src="/js/httpClient.js"></script>
     <script>
         var map;
+        var minLevel = 6;  // 지도에 클러스터 할 최소 지도 레벨
+        var currentPolyline = null;  // 전역 변수로 선언 (이전 폴리라인 추적)
+        let currentRouteId = null;  // 선택된 노선 ID
 
         document.addEventListener("DOMContentLoaded", function() {
             // 지도 생성
@@ -57,6 +60,18 @@
             // 클릭 이벤트 등록
             kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
                 // var position = mouseEvent.latLng;
+            });
+
+            // 줌 변경 이벤트 등록
+            kakao.maps.event.addListener(map, 'zoom_changed', function () {
+                const zoomLevel = map.getLevel();
+                if (currentPolyline) {
+                    if (zoomLevel >= minLevel) {
+                        currentPolyline.setMap(null); // 숨김
+                    } else {
+                        currentPolyline.setMap(map);  // 다시 표시
+                    }
+                }
             });
 
             // 모든 정류소 정보 조회
@@ -84,7 +99,7 @@
                 const clusterer = new kakao.maps.MarkerClusterer({
                     map: map,
                     averageCenter: true,
-                    minLevel: 4 // 클러스터 할 최소 지도 레벨
+                    minLevel: minLevel
                 });
 
                 const markers = busStopData.map(stop => {
@@ -92,7 +107,6 @@
 
                     kakao.maps.event.addListener(marker, 'click', function() {
                         showBusStopInfo(stop);
-                        console.log(stop);
                     });
 
                     return marker;
@@ -111,11 +125,50 @@
                 const badgeContainer = document.getElementById('route-badges');
 
                 badgeContainer.innerHTML = routeList.map(route => `
-                    <span class="route-badge">${route.routeName}</span>
+                    <span class="route-badge" onclick="clickRoute('${route.routeId}')">${route.routeName}</span>
                 `).join('');
 
                 // 정표 패널 표출
                 showInfoPanel();
+            });
+        }
+
+        // 정보패널에서 노선 선택
+        function clickRoute(routeId) {
+            // 같은 노선 다시 클릭하면 무시
+            if (routeId === currentRouteId) return;
+
+            currentRouteId = routeId;
+
+            // 이전 폴리라인 제거
+            if (currentPolyline) {
+                currentPolyline.setMap(null);
+                currentPolyline = null;
+            }
+
+            // 노선에 속한 정류장 리스트 조회
+            get(`/api/map/routes/${routeId}/stops`, function(stopList) {
+                const linePath = stopList.map(stop => new kakao.maps.LatLng(stop.lat, stop.lng));
+                const polyline = createPolyline(linePath);
+                polyline.setMap(map);
+
+                const zoomLevel = map.getLevel();
+                if (zoomLevel < minLevel) {
+                    polyline.setMap(map);
+                }
+
+                currentPolyline = polyline;
+
+                // 순서 표시 (CustomOverlay로 각 마커 위에 번호 표시)
+                linePath.forEach((position, index) => {
+                    const label = new kakao.maps.CustomOverlay({
+                        position: position,
+                        content: `<div class="marker-label">${index + 1}</div>`,
+                        yAnchor: 1
+                    });
+
+                    label.setMap(map);
+                });
             });
         }
 

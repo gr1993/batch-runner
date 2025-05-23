@@ -33,4 +33,13 @@ public class MapService {
         }
         return result;
     }
+
+    public List<RouteStopResDto> getStopListByRouteId(String routeId) {
+        List<RouteStopInfo> routeStopInfoList =routeStopInfoRepository.findAllByIdRouteIdOrderByIdNodeSeqAsc(routeId);
+        List<RouteStopResDto> result = new ArrayList<>();
+        for (RouteStopInfo routeStopInfo : routeStopInfoList) {
+            result.add(RouteStopResDto.fromEntity(routeStopInfo));
+        }
+        return result;
+    }
 }

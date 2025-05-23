@@ -35,4 +35,12 @@ public class MapApiController {
         return ResponseEntity.ok(mapService.getRouteIntoListByNodeId(nodeId));
     }
 
+    /**
+     * 특정 노선의 모든 정류장 리스트 조회
+     */
+    @GetMapping("routes/{routeId}/stops")
+    public ResponseEntity<List<RouteStopResDto>> getStopListByRouteId(@PathVariable("routeId") String routeId) {
+        return ResponseEntity.ok(mapService.getStopListByRouteId(routeId));
+    }
+
 }

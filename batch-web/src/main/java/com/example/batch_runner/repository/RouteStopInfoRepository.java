@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface RouteStopInfoRepository extends JpaRepository<RouteStopInfo, RouteStopInfoId> {
     List<RouteStopInfo> findAllByNodeId(String nodeId);
+
+    List<RouteStopInfo> findAllByIdRouteIdOrderByIdNodeSeqAsc(String routeId);
 }
