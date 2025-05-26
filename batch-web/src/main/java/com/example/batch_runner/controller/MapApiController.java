@@ -58,4 +58,22 @@ public class MapApiController {
     public ResponseEntity<List<RouteStopResDto>> getFavoriteStopList() {
         return ResponseEntity.ok(mapService.getFavoriteStopList());
     }
+
+    /**
+     * 정류소 즐겨찾기 추가
+     */
+    @PostMapping("stop/favorite/{nodeId}")
+    public ResponseEntity<Void> addFavoriteStop(@PathVariable("nodeId") String nodeId) {
+        mapService.addFavoriteStop(nodeId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 정류소 즐겨찾기 삭제
+     */
+    @DeleteMapping("stop/favorite/{nodeId}")
+    public ResponseEntity<Void> removeFavoriteStop(@PathVariable("nodeId") String nodeId) {
+        mapService.removeFavoriteStop(nodeId);
+        return ResponseEntity.ok().build();
+    }
 }

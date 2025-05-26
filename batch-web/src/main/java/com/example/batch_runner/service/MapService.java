@@ -11,6 +11,7 @@ import com.example.batch_runner.repository.RouteStopInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,5 +76,18 @@ public class MapService {
                 .map(list -> list.get(0))
                 .map(RouteStopResDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void addFavoriteStop(String nodeId) {
+        List<RouteStopInfo> stopList = routeStopInfoRepository.findAllByNodeId(nodeId);
+        for (RouteStopInfo stop : stopList) {
+            favoriteRouteRepository.insertFavorite(stop.getId().getRouteId(), stop.getNodeId());
+        }
+    }
+
+    @Transactional
+    public void removeFavoriteStop(String nodeId) {
+        favoriteRouteRepository.deleteFavorite(nodeId);
     }
 }
