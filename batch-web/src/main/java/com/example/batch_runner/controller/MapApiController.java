@@ -51,4 +51,11 @@ public class MapApiController {
         return ResponseEntity.ok(mapService.getBusArrivalInfoList(nodeId, routeId, nodeSeq));
     }
 
+    /**
+     * 즐겨찾기 정류장 목록 조회
+     */
+    @GetMapping("stop/favorites")
+    public ResponseEntity<List<RouteStopResDto>> getFavoriteStopList() {
+        return ResponseEntity.ok(mapService.getFavoriteStopList());
+    }
 }

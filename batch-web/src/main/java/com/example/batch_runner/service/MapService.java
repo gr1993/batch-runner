@@ -6,6 +6,7 @@ import com.example.batch_runner.dto.RouteStopResDto;
 import com.example.batch_runner.external.client.RestApiClient;
 import com.example.batch_runner.external.dto.BaiServiceResult;
 import com.example.batch_runner.external.dto.BusArrivalInfoDto;
+import com.example.batch_runner.repository.FavoriteRouteRepository;
 import com.example.batch_runner.repository.RouteStopInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ public class MapService {
 
     private final RouteStopInfoRepository routeStopInfoRepository;
     private final RestApiClient restApiClient;
+    private final FavoriteRouteRepository favoriteRouteRepository;
 
     @Value("${app.serviceKey}")
     private String serviceKey;
@@ -46,7 +48,7 @@ public class MapService {
     }
 
     public List<RouteStopResDto> getStopListByRouteId(String routeId) {
-        List<RouteStopInfo> routeStopInfoList =routeStopInfoRepository.findAllByIdRouteIdOrderByIdNodeSeqAsc(routeId);
+        List<RouteStopInfo> routeStopInfoList = routeStopInfoRepository.findAllByIdRouteIdOrderByIdNodeSeqAsc(routeId);
 
         return routeStopInfoList.stream()
                 .map(RouteStopResDto::fromEntity)
@@ -60,5 +62,18 @@ public class MapService {
         );
         BaiServiceResult response = restApiClient.get(url, BaiServiceResult.class);
         return response.getMsgBody().getItemList();
+    }
+
+    public List<RouteStopResDto> getFavoriteStopList() {
+        List<String> favoriteNodeIdList = favoriteRouteRepository.findNodeIdsGroupByNodeId();
+
+        List<RouteStopInfo> favoriteStopList = routeStopInfoRepository.findAllByNodeIdIn(favoriteNodeIdList);
+        return favoriteStopList.stream()
+                .collect(Collectors.groupingBy(RouteStopInfo::getNodeId))
+                .values()
+                .stream()
+                .map(list -> list.get(0))
+                .map(RouteStopResDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }

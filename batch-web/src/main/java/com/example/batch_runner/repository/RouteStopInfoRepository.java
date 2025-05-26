@@ -10,4 +10,6 @@ public interface RouteStopInfoRepository extends JpaRepository<RouteStopInfo, Ro
     List<RouteStopInfo> findAllByNodeId(String nodeId);
 
     List<RouteStopInfo> findAllByIdRouteIdOrderByIdNodeSeqAsc(String routeId);
+
+    List<RouteStopInfo> findAllByNodeIdIn(List<String> nodeIds);
 }

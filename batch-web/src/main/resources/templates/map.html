@@ -6,7 +6,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/map.css?v=3">
+    <link rel="stylesheet" href="/css/map.css?v=4">
 </head>
 <body>
     <div class="sidebar">
@@ -18,10 +18,19 @@
     <div class="content">
         <h1>관심 정류소 보기</h1>
 
+        <div class="favorites-bar">
+            <h3>⭐ 즐겨찾기 목록</h3>
+            <ul id="favorites-list" class="favorites-list"></ul>
+        </div>
+
+
         <div class="main">
             <div id="map"></div>
+
+            <!-- 정류소 정보 패널 UI -->
             <div class="info-panel hidden" id="info-panel">
                 <button class="close-btn" onclick="hideInfoPanel()">×</button>
+
                 <div id="info-content">
                     <div style="display: flex; align-items: center;">
                         <svg id="favorite-icon" class="favorite-icon" onclick="toggleFavorite()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="gold" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -83,6 +92,9 @@
 
             // 모든 정류소 정보 조회
             loadAllBusStop();
+
+            // 즐겨찾기 목록 표시하기
+            showFavoriteStopList();
         });
 
         // 사용자의 위치 정보를 가져온 경우 호출
@@ -243,6 +255,7 @@
             document.getElementById('info-panel').classList.add('hidden');
         }
 
+        // 정류소 즐겨찾기 이벤트
         function toggleFavorite() {
             const icon = document.getElementById('favorite-icon');
             const isFavorited = icon.classList.toggle('favorited');
@@ -263,6 +276,35 @@
         function removeFromFavorites(stopId) {
             // 로컬스토리지 또는 서버 연동 로직
             console.log(`Removed stop ${stopId} from favorites.`);
+        }
+
+        // 즐겨찾기 목록 가져와 표시하기
+        var favoriteStopInfos = {};
+        function showFavoriteStopList() {
+            get(`/api/map/stop/favorites`, function(favoriteStopList) {
+                const favoritesElement = document.getElementById('favorites-list')
+
+                favoritesElement.innerHTML = favoriteStopList.map((stopInfo) => {
+                    favoriteStopInfos[stopInfo.nodeId] = stopInfo;
+
+                    return `
+                        <li onclick="clickFavoriteStop(${stopInfo.nodeId})">
+                            ${stopInfo.nodeName}
+                        </li>
+                    `
+                }).join('');
+            });
+        }
+
+        // 즐겨찾기 정류소 클릭 이벤트
+        function clickFavoriteStop(nodeId) {
+            const stopInfo = favoriteStopInfos[nodeId];
+
+            // 정보패널 표시
+            showBusStopInfo(stopInfo);
+
+            // 위치로 이동
+            map.setCenter(new kakao.maps.LatLng(stopInfo.lat, stopInfo.lng));
         }
     </script>
 
