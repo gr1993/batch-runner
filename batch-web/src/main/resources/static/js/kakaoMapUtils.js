@@ -4,17 +4,27 @@
 // 직접 이미지를 다운로드 받아서 정적리소스로 활용 (다운로드 링크 : https://www.flaticon.com/search?word=bus)
 var busImage = "/image/bus.png";
 var stopImage = "/image/bus-stop.png";
+var downArrowImage = "/image/down-arrow.png";
 var imageSize = new kakao.maps.Size(35, 35);
 function createMarker(position, type, title) {
     var markerOption = { position };
+    var imageOption = {};
+    var size = imageSize;
 
     if (type) {
         var image = busImage;
+
         switch(type) {
             case 'stop' : image = stopImage; break;
+            case 'downArrow' : {
+                image = downArrowImage;
+                imageOption.offset = new kakao.maps.Point(10, 65);
+                size = new kakao.maps.Size(20, 30);
+                break;
+            }
         }
 
-        var markerImage = new kakao.maps.MarkerImage(image, imageSize);
+        var markerImage = new kakao.maps.MarkerImage(image, size, imageOption);
         markerOption.image = markerImage;
     }
 
