@@ -10,4 +10,7 @@ public class FavoriteRoute {
 
     @Id
     private String routeId;
+
+    @Id
+    private String nodeId;
 }

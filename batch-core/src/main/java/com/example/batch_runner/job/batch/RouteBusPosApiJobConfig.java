@@ -53,7 +53,7 @@ public class RouteBusPosApiJobConfig {
     @Bean
     public Step routeBusPosApiStep() {
         return new StepBuilder("routeBusPosApiStep", jobRepository)
-                .<FavoriteRoute, List<RouteBusPos>>chunk(CHUNK_SIZE, transactionManager)
+                .<String, List<RouteBusPos>>chunk(CHUNK_SIZE, transactionManager)
                 .reader(routeBusPosApiReader())
                 .processor(routeBusPosApiProcessor())
                 .writer(routeBusPosApiWriter())
@@ -64,10 +64,10 @@ public class RouteBusPosApiJobConfig {
      * 노선 하나씩 처리하기 때문에 Cursor 방식이 적합하다.
      */
     @Bean
-    public JpaCursorItemReader<FavoriteRoute> routeBusPosApiReader() {
-        JpaCursorItemReader<FavoriteRoute> reader = new JpaCursorItemReader<>();
+    public JpaCursorItemReader<String> routeBusPosApiReader() {
+        JpaCursorItemReader<String> reader = new JpaCursorItemReader<>();
         reader.setEntityManagerFactory(emf);
-        reader.setQueryString("SELECT f FROM FavoriteRoute f");
+        reader.setQueryString("SELECT f.routeId FROM FavoriteRoute f GROUP BY f.routeId");
         reader.setName("routeBusPosApiItemReader");
         reader.setSaveState(true);
         return reader;
@@ -77,24 +77,23 @@ public class RouteBusPosApiJobConfig {
      * 하나의 노선에 대해서 버스 위치 정보를 삭제 후 저장할 버스 위치를 외부 API에서 가져옴
      */
     @Bean
-    public ItemProcessor<FavoriteRoute, List<RouteBusPos>> routeBusPosApiProcessor() {
-        return favoriteRoute -> {
-            String busRouteId = favoriteRoute.getRouteId();
+    public ItemProcessor<String, List<RouteBusPos>> routeBusPosApiProcessor() {
+        return routeId -> {
 
             // 1. 삭제 작업
-            routeBusPosRepository.deleteByRouteId(busRouteId);
+            routeBusPosRepository.deleteByRouteId(routeId);
 
             // 2. API 호출하여 routeId에 해당하는 버스 위치 정보를 가져옴
             String url = String.format(
                 "http://ws.bus.go.kr/api/rest/buspos/getBusPosByRtid?serviceKey=%s&busRouteId=%s",
-                serviceKey, busRouteId
+                serviceKey, routeId
             );
             ServiceResult response = restApiClient.get(url, ServiceResult.class);
             List<BusPosition> busPositions = response.getMsgBody().getItemList();
             List<RouteBusPos> result = new ArrayList<>();
             for (BusPosition busPosition : busPositions) {
                 RouteBusPos busPosInfo = new RouteBusPos();
-                busPosInfo.setRouteId(busRouteId);
+                busPosInfo.setRouteId(routeId);
                 busPosInfo.setVehId(busPosition.getVehId());
                 busPosInfo.setPlainNo(busPosition.getPlainNo());
                 busPosInfo.setCongetion(busPosition.getCongetion());

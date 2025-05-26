@@ -67,8 +67,8 @@ ALTER TABLE scheduler_job ADD CONSTRAINT uq_job_name_group UNIQUE (job_name, job
 -- 노선별 버스 실시간 위치 테이블
 CREATE TABLE route_bus_pos (
     veh_id BIGINT PRIMARY KEY,
-    route_id VARCHAR(255),
-    plain_no VARCHAR(255),
+    route_id VARCHAR(20),
+    plain_no VARCHAR(100),
     congetion INTEGER,
     pos_x NUMERIC(10, 7),
     pos_y NUMERIC(10, 7)
@@ -89,9 +89,16 @@ CREATE INDEX idx_route_bus_pos_route_id ON route_bus_pos(route_id);
 
 -- 즐겨찾기 노선 등록 테이블
 CREATE TABLE favorite_route (
-    route_id VARCHAR(50) PRIMARY KEY
+    route_id VARCHAR(20),
+    node_id VARCHAR(20)
 );
+
+-- favorite_route 테이블 PK 설정
+ALTER TABLE favorite_route
+ADD CONSTRAINT pk_favorite_route
+PRIMARY KEY (route_id, node_id);
 
 COMMENT ON TABLE favorite_route IS '즐겨찾기 노선 등록 테이블';
 
 COMMENT ON COLUMN favorite_route.route_id IS '노션 ID';
+COMMENT ON COLUMN favorite_route.node_id IS '정류소 ID';
