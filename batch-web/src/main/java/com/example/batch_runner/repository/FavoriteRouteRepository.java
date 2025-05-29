@@ -38,4 +38,12 @@ public class FavoriteRouteRepository {
         return em.createQuery("SELECT f.nodeId FROM FavoriteRoute f GROUP BY f.nodeId", String.class)
                 .getResultList();
     }
+
+    /**
+     * 즐겨찾기 노선 목록 가져오기
+     */
+    public List<String> findRouteIdsGroupByRouteId() {
+        return em.createQuery("SELECT f.routeId FROM FavoriteRoute f GROUP BY f.routeId", String.class)
+                .getResultList();
+    }
 }

@@ -60,6 +60,7 @@
         var currentStopInfo;
         var currentStopMarker;
         var favoriteStopInfos = {};
+        var busMarkers = [];
 
         document.addEventListener("DOMContentLoaded", function() {
             // 지도 생성
@@ -99,6 +100,9 @@
 
             // 즐겨찾기 목록 표시하기
             showFavoriteStopList();
+
+            // 버스 위치 SSE 이벤트 등록
+            setSseEvent();
         });
 
         // 사용자의 위치 정보를 가져온 경우 호출
@@ -335,6 +339,29 @@
 
             // 위치로 이동
             map.panTo(new kakao.maps.LatLng(stopInfo.lat, stopInfo.lng));
+        }
+
+        // 버스 위치 정보 처리 이벤트 설정(SSE)
+        function setSseEvent() {
+            const sse = new EventSource("/api/map/bus/pos");
+
+            sse.onmessage = function(event) {
+                const busPosInfoList = JSON.parse(event.data);
+
+                // 기존 버스 마커 제거
+                clearBusMarkers();
+
+                busPosInfoList.forEach((busPosInfo) => {
+                    var marker = createMarker(new kakao.maps.LatLng(busPosInfo.posY, busPosInfo.posX), 'bus', busPosInfo.plainNo);
+                    marker.setMap(map);
+                    busMarkers.push(marker);
+                });
+            };
+        }
+
+        function clearBusMarkers() {
+            busMarkers.forEach((marker) => marker.setMap(null));
+            busMarkers = [];
         }
     </script>
 

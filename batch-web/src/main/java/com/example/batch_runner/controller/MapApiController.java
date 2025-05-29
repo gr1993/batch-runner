@@ -3,10 +3,13 @@ package com.example.batch_runner.controller;
 import com.example.batch_runner.dto.RouteInfoDto;
 import com.example.batch_runner.dto.RouteStopResDto;
 import com.example.batch_runner.external.dto.BusArrivalInfoDto;
+import com.example.batch_runner.service.BusPosService;
 import com.example.batch_runner.service.MapService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -16,6 +19,7 @@ import java.util.List;
 public class MapApiController {
 
     private final MapService mapService;
+    private final BusPosService busPosService;
 
     /**
      * 모든 정류소 정보 조회
@@ -75,5 +79,13 @@ public class MapApiController {
     public ResponseEntity<Void> removeFavoriteStop(@PathVariable("nodeId") String nodeId) {
         mapService.removeFavoriteStop(nodeId);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 즐겨찾기에 등록된 노선의 버스 위치 조회 (SSE)
+     */
+    @GetMapping(value = "bus/pos", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public ResponseEntity<SseEmitter> getBusPosListByFavoriteRouteId() {
+        return ResponseEntity.ok(busPosService.registerSse());
     }
 }
