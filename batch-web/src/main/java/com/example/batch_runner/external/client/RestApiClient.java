@@ -38,6 +38,10 @@ public class RestApiClient {
         }
     }
 
+    public void post(String url, Object requestBody) {
+        post(url, requestBody, String.class);
+    }
+
     public <T> T post(String url, Object requestBody, Class<T> responseType) {
         try {
             HttpHeaders headers = new HttpHeaders();
