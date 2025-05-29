@@ -46,6 +46,15 @@ public class BusPosService {
 
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
+
+        List<String> routeIds = favoriteRouteRepository.findRouteIdsGroupByRouteId();
+        List<RouteBusPos> busPosList = routeBusPosRepository.findAllByRouteIdIn(routeIds);
+        try {
+            emitter.send(busPosList);
+        } catch (IOException e) {
+            emitters.remove(emitter);
+        }
+
         return emitter;
     }
 
