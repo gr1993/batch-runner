@@ -103,6 +103,7 @@ button:hover {
 .jobcard-name {
     font-weight: bold;
     font-size: 1.1em;
+    cursor: pointer;
 }
 
 .jobcard-status {

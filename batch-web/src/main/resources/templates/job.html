@@ -8,7 +8,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/job.css?v=2">
+    <link rel="stylesheet" href="/css/job.css?v=3">
 </head>
 <body>
     <div class="sidebar">
@@ -42,14 +42,18 @@
 
     <!-- 작업 등록 모달 -->
     <div th:replace="~{modal/jobRegisterModal :: jobRegisterModal}"></div>
+    <!-- 작업 수정 모달 -->
+    <div th:replace="~{modal/jobModifyModal :: jobModifyModal}"></div>
 
 
     <script type="text/javascript" src="/js/httpClient.js?v=3"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-
             // 작업 등록 모달 초기 설정
             setupJobRegisterModal();
+
+            // 작업 수정 모달 초기 설정
+            setupJobModifyModal();
 
             // polling 1초 마다 작업 관리 조회
             setInterval(searchJobList, 1000);
@@ -65,7 +69,7 @@
                 cardBody.innerHTML = jobInfoList.map(jobInfo => `
                    <div class="jobcard-container" id="job-container">
                         <div class="jobcard-header">
-                            <span class="jobcard-name">${jobInfo.jobName}</span>
+                            <span class="jobcard-name" onclick="openJobModifyModal(${jobInfo.id});">${jobInfo.jobName}</span>
                             <span class="jobcard-status jobcard-status-${jobInfo.status.toLowerCase()}">${jobInfo.status}</span>
                         </div>
                         <div class="jobcard-body">

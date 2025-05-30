@@ -1,8 +1,11 @@
 package com.example.batch_runner.service;
 
+import com.example.batch_runner.domain.SchedulerJob;
 import com.example.batch_runner.dto.ScheduleInfoDto;
 import com.example.batch_runner.dto.SchedulerJobCreateDto;
+import com.example.batch_runner.dto.SchedulerJobUpdateDto;
 import com.example.batch_runner.external.client.RestApiClient;
+import com.example.batch_runner.repository.SchedulerJobRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobService {
 
+    private final SchedulerJobRepository schedulerJobRepository;
     private final RestApiClient restApiClient;
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -36,8 +40,16 @@ public class JobService {
         return fetchAndParse(batchCoreUrl + uri, new TypeReference<List<ScheduleInfoDto>>() {});
     }
 
+    public SchedulerJob getScheduleJob(long id) {
+        return schedulerJobRepository.findById(id).orElse(null);
+    }
+
     public void createScheduleInfo(SchedulerJobCreateDto createDto) {
         restApiClient.post(batchCoreUrl + "/api/schedule", createDto);
+    }
+
+    public void updateScheduleInfo(long id, SchedulerJobUpdateDto updateDto) {
+        restApiClient.put(batchCoreUrl + "/api/schedule/" + id, updateDto);
     }
 
     private <T> T fetchAndParse(String url, TypeReference<T> typeRef) {

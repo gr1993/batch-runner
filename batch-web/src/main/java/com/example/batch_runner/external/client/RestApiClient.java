@@ -19,37 +19,33 @@ public class RestApiClient {
     private final ObjectMapper objectMapper;
 
     public <T> T get(String url, Class<T> responseType) {
-        try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    new URI(url), HttpMethod.GET, null, String.class
-            );
-
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("HTTP 응답 코드 오류: " + response.getStatusCode());
-            }
-
-            if (responseType == String.class) {
-                return responseType.cast(response.getBody());
-            }
-            return parseBody(response.getBody(), responseType);
-
-        } catch (Exception e) {
-            throw new RuntimeException("GET 요청 실패", e);
-        }
+        return request(HttpMethod.GET, url, null, responseType);
     }
 
     public void post(String url, Object requestBody) {
-        post(url, requestBody, String.class);
+        request(HttpMethod.POST, url, requestBody, String.class);
     }
 
-    public <T> T post(String url, Object requestBody, Class<T> responseType) {
+    public void put(String url, Object requestBody) {
+        request(HttpMethod.PUT, url, requestBody, String.class);
+    }
+
+    public void delete(String url) {
+        request(HttpMethod.DELETE, url, null, String.class);
+    }
+
+    private <T> T request(HttpMethod httpMethod, String url, Object requestBody, Class<T> responseType) {
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Object> requestEntity = new HttpEntity<>(requestBody, headers);
+            HttpEntity<Object> requestEntity = null;
+
+            if (requestBody != null) {
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                requestEntity = new HttpEntity<>(requestBody, headers);
+            }
 
             ResponseEntity<String> response = restTemplate.exchange(
-                    new URI(url), HttpMethod.POST, requestEntity, String.class
+                    new URI(url), httpMethod, requestEntity, String.class
             );
 
             if (!response.getStatusCode().is2xxSuccessful()) {
@@ -62,7 +58,7 @@ public class RestApiClient {
             return parseBody(response.getBody(), responseType);
 
         } catch (Exception e) {
-            throw new RuntimeException("POST 요청 실패", e);
+            throw new RuntimeException(e);
         }
     }
 

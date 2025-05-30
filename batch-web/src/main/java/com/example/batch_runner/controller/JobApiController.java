@@ -1,7 +1,9 @@
 package com.example.batch_runner.controller;
 
+import com.example.batch_runner.domain.SchedulerJob;
 import com.example.batch_runner.dto.ScheduleInfoDto;
 import com.example.batch_runner.dto.SchedulerJobCreateDto;
+import com.example.batch_runner.dto.SchedulerJobUpdateDto;
 import com.example.batch_runner.service.JobService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -34,11 +36,29 @@ public class JobApiController {
     }
 
     /**
+     * id로 작업 정보 조회
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<SchedulerJob> getJob(@PathVariable(value = "id") long id) {
+        return ResponseEntity.ok(jobService.getScheduleJob(id));
+    }
+
+    /**
      * 작업 등록
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createJob(@RequestBody SchedulerJobCreateDto createDto) {
         jobService.createScheduleInfo(createDto);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 작업 수정
+     */
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateJob(@PathVariable(value = "id") long id,
+                                          @RequestBody SchedulerJobUpdateDto updateDto) {
+        jobService.updateScheduleInfo(id, updateDto);
         return ResponseEntity.ok().build();
     }
 }
