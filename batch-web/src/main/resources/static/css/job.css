@@ -1,3 +1,4 @@
+/* 작업 관리 검색 부분 css */
 .card {
   background-color: white;
   border: 1px solid #ddd;
@@ -51,11 +52,8 @@ button:hover {
   background-color: #0056b3;
 }
 
-#orderList {
-  padding: 10px;
-}
 
-
+/* 등록, 삭제 등 액션 버튼바 css */
 .action-bar {
     margin: 10px 0;
     text-align: right;
@@ -75,6 +73,60 @@ button:hover {
 }
 
 
+/* 작업 리스트 card css */
+.jobcard-container {
+    font-family: Arial, sans-serif;
+    background: #e6f4f1;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.jobcard-container:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.jobcard-card {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: background 0.3s;
+}
+
+.jobcard-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+}
+
+.jobcard-name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.jobcard-status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    color: #fff;
+}
+
+.jobcard-status-normal, .jobcard-status-running { background: #007bff; }
+.jobcard-status-complete { background: #28a745; }
+.jobcard-status-paused, .jobcard-status-error, .jobcard-status-blocked  { background: #dc3545; }
+
+.jobcard-body div {
+    margin-bottom: 4px;
+}
+
+.jobcard-label {
+    font-weight: bold;
+    margin-right: 6px;
+}
+
+
+/* 모달용 css */
 .modal {
   display: none;
   position: fixed;

@@ -1,5 +1,6 @@
 package com.example.batch_runner.service;
 
+import com.example.batch_runner.dto.ScheduleInfoDto;
 import com.example.batch_runner.dto.SchedulerJobCreateDto;
 import com.example.batch_runner.external.client.RestApiClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -23,15 +25,27 @@ public class JobService {
 
 
     public List<String> getBatchJobNameList() {
-        try {
-            String json = restApiClient.get(batchCoreUrl + "/api/batch/jobs", String.class);
-            return mapper.readValue(json, new TypeReference<List<String>>() {});
-        } catch (JsonProcessingException ex) {
-            throw new RuntimeException(ex);
+        return fetchAndParse(batchCoreUrl + "/api/batch/jobs", new TypeReference<List<String>>() {});
+    }
+
+    public List<ScheduleInfoDto> getScheduleInfoList(String jobName) {
+        String uri = "/api/schedule";
+        if (StringUtils.hasText(jobName)) {
+            uri += "?jobName=" + jobName;
         }
+        return fetchAndParse(batchCoreUrl + uri, new TypeReference<List<ScheduleInfoDto>>() {});
     }
 
     public void createScheduleInfo(SchedulerJobCreateDto createDto) {
         restApiClient.post(batchCoreUrl + "/api/schedule", createDto);
+    }
+
+    private <T> T fetchAndParse(String url, TypeReference<T> typeRef) {
+        try {
+            String json = restApiClient.get(url, String.class);
+            return mapper.readValue(json, typeRef);
+        } catch (JsonProcessingException ex) {
+            throw new RuntimeException("JSON 파싱 실패: " + url, ex);
+        }
     }
 }

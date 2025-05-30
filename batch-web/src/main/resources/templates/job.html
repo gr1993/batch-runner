@@ -8,10 +8,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/job.css?v=1">
-
-    <!-- grid.js css -->
-    <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/job.css?v=2">
 </head>
 <body>
     <div class="sidebar">
@@ -26,9 +23,9 @@
         <div class="card">
             <form id="searchForm">
                 <div class="form-row">
-                    <label for="memberId">작업명</label>
-                    <input type="text" id="memberId" name="memberId">
-                    <button type="button" id="btnNavbarSearch" onclick="searchOrderList();">검색</button>
+                    <label for="searchJobName">작업명</label>
+                    <input type="text" id="searchJobName">
+                    <button type="button" id="btnNavbarSearch" onclick="searchJobList();">검색</button>
                 </div>
             </form>
         </div>
@@ -39,9 +36,7 @@
 
         <div class="card">
             <div class="card-header">작업 목록</div>
-            <div class="card-body" style="padding: 0;">
-                <div id="jobList"></div>
-            </div>
+            <div class="card-body" style="padding: 0;"></div>
         </div>
     </div>
 
@@ -50,44 +45,38 @@
 
 
     <script type="text/javascript" src="/js/httpClient.js?v=3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
-            // grid 설정
-            var grid = new gridjs.Grid({
-             columns: [
-               {id: "id", name: "작업명", width: "150px"},
-               {id: "status", name: "상태", width: "100px"},
-               {id: "cron", name: "Cron 스케줄", width: "100px"},
-               {
-                   id: "startDate",
-                   name: "최근 실행시간",
-                   width: "200px",
-                   formatter: (cell) => new Date(cell).toLocaleString("ko-KR", {
-                     year: "numeric",
-                     month: "2-digit",
-                     day: "2-digit",
-                     hour: "2-digit",
-                     minute: "2-digit",
-                     second: "2-digit"
-                   })
-               },
-             ],
-             data: []
-           }).render(document.getElementById("jobList"));
-
-           // grid row 선택 이벤트
-           grid.on('rowClick', (...args) => {
-               //const orderId = args[1]._cells[0].data;
-               //showOrderDetailModal(orderId);
-
-               alert('hello');
-           });
-
             // 작업 등록 모달 초기 설정
             setupJobRegisterModal();
+
+            // polling 1초 마다 작업 관리 조회
+            setInterval(searchJobList, 1000);
         });
+
+        // 작업 관리 조회
+        function searchJobList() {
+            const jobName = document.getElementById('searchJobName').value;
+
+            get(`/api/job?jobName=${jobName}`, function(jobInfoList) {
+                const cardBody = document.querySelector('.card-body');
+
+                cardBody.innerHTML = jobInfoList.map(jobInfo => `
+                   <div class="jobcard-container" id="job-container">
+                        <div class="jobcard-header">
+                            <span class="jobcard-name">${jobInfo.jobName}</span>
+                            <span class="jobcard-status jobcard-status-${jobInfo.status.toLowerCase()}">${jobInfo.status}</span>
+                        </div>
+                        <div class="jobcard-body">
+                            <div><span class="jobcard-label">Cron 스케줄:</span>${jobInfo.cronExpression}</div>
+                            <div><span class="jobcard-label">최근 실행:</span>${jobInfo.previousFireTime}</div>
+                            <div><span class="jobcard-label">다음 실행:</span>${jobInfo.nextFireTime}</div>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
     </script>
 </body>
 </html>
