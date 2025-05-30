@@ -2,53 +2,50 @@
 
 // get 요청
 function get(url, callback) {
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => response.text())
-    .then(text => {
-        const data = text ? JSON.parse(text) : [];
-        if (callback) callback(data);
-    })
-    .catch(error => console.error(error));
+    request(url, 'GET', null, callback);
 }
 
 // post 요청
 function post(url, body, callback) {
-    const options = {
-        method: 'POST',
-        headers: {}
-    };
+    request(url, 'POST', body, callback);
+}
 
-    if (body) {
-        options.headers['Content-Type'] = 'application/json';
-        options.body = JSON.stringify(body);
-    }
-
-    fetch(url, options)
-        .then(response => response.text())
-        .then(text => {
-            const data = text ? JSON.parse(text) : [];
-            if (callback) callback(data);
-        })
-        .catch(error => console.error(error));
+// put 요청
+function put(url, body, callback) {
+    request(url, 'PUT', body, callback);
 }
 
 // delete 요청
 function doDelete(url, callback) {
-    fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    })
-    .then(response => response.text())
-    .then(text => {
-        const data = text ? JSON.parse(text) : [];
-        if (callback) callback(data);
-    })
-    .catch(error => console.error(error));
+    request(url, 'DELETE', null, callback);
+}
+
+function request(url, method = 'GET', body = null, callback = null) {
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    if (body) {
+        options.body = JSON.stringify(body);
+    }
+
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errText => {
+                    throw new Error(`HTTP ${response.status}: ${errText}`);
+                });
+            }
+            return response.text();
+        })
+        .then(text => {
+            const data = text ? JSON.parse(text) : [];
+            if (callback) callback(data);
+        })
+        .catch(error => {
+            alert(`요청 실패(${error.message})`);
+        });
 }

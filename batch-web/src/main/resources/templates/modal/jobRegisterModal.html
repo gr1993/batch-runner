@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>작업 등록 모달</title>
+</head>
+<body>
+
+<th:block th:fragment="jobRegisterModal">
+
+  <div id="jobRegisterModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+
+      <h2>작업 등록</h2>
+      <form class="job-form">
+        <div class="form-group">
+          <label for="jobNameForJrm">작업 이름</label>
+          <select id="jobNameForJrm" name="jobName" required></select>
+        </div>
+
+        <div class="form-group">
+          <label for="jobDescForJrm">작업 설명</label>
+          <textarea id="jobDescForJrm" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="jobCronForJrm">Cron 표현식</label>
+          <input type="text" id="jobCronForJrm" name="cronExpression" value="0/30 * * * * ?" required>
+        </div>
+
+        <div class="form-buttons">
+          <button type="button" class="save-btn">등록</button>
+          <button type="button" class="cancel-btn">취소</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 작업 등록 모달 초기 설정
+    function setupJobRegisterModal() {
+      const modal = document.getElementById('jobRegisterModal');
+      const form = modal.querySelector(".job-form");
+      const saveBtn = modal.querySelector(".save-btn");
+      const closeBtn = modal.querySelector(".close");
+      const cancelBtn = modal.querySelector(".cancel-btn");
+
+      // 작업 등록
+      saveBtn.onclick = () => {
+        const jobName = form.jobName.value;
+        const description = form.description.value;
+        const cronExpression = form.cronExpression.value;
+
+        if (!jobName || !cronExpression) {
+          alert('작업 이름 또는 Cron 표현식을 입력하세요')
+          return;
+        }
+
+        const json = {
+          jobName,
+          description,
+          cronExpression,
+        };
+
+        post(`/api/job`, json, function() {
+          alert('작업 등록이 완료되었습니다.');
+          closeModal();
+        });
+      };
+
+      function closeModal() {
+        modal.style.display = "none";
+        form.reset();
+      };
+
+      closeBtn.onclick = closeModal;
+      cancelBtn.onclick = closeModal;
+
+      // 모달 밖을 클릭했을 때 모달 종료
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      };
+    }
+
+    // 작업 등록 모달 열기
+    function openJobRegisterModal() {
+      const modal = document.getElementById('jobRegisterModal');
+      modal.style.display = "block";
+
+      // batch job명을 select 태그에 설정
+      get(`/api/job/batch/name`, function(batchNameList) {
+        const form = modal.querySelector(".job-form");
+        const select = form.jobName;
+
+        let optionHtml = '<option value="">선택하세요</option>';
+        batchNameList.forEach(batchName => {
+          optionHtml += `<option value="${batchName}">${batchName}</option>`;
+        });
+        select.innerHTML = optionHtml;
+      });
+    }
+  </script>
+
+</th:block>
+
+</body>
+</html>
