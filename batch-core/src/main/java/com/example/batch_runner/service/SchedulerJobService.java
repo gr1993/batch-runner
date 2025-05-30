@@ -14,6 +14,7 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,11 +36,16 @@ public class SchedulerJobService {
     /**
      * DB에 등록한 스케줄 정보와 Quartz의 Job 정보를 결합하여 스케줄 정보를 반환
      */
-    public List<ScheduleInfoDto> getScheduleInfoList() {
+    public List<ScheduleInfoDto> getScheduleInfoList(String jobName) {
         try {
             List<SchedulerJob> jobList = schedulerJobRepository.findAllByUseYn("Y");
             List<ScheduleInfoDto> scheduleInfoList = new ArrayList<>();
             for (SchedulerJob job : jobList) {
+                // jobName 검색어가 있으면 매칭된 job만 처리
+                if (StringUtils.hasText(jobName) && !job.getJobName().contains(jobName)) {
+                    continue;
+                }
+
                 ScheduleInfoDto scheduleInfoDto = new ScheduleInfoDto();
                 scheduleInfoDto.setId(job.getId());
                 scheduleInfoDto.setJobName(job.getJobName());

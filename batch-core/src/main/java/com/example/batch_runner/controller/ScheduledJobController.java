@@ -22,8 +22,8 @@ public class ScheduledJobController {
      * schedule 작업 리스트 반환 API
      */
     @GetMapping
-    public ResponseEntity<List<ScheduleInfoDto>> getScheduleJobList() {
-        List<ScheduleInfoDto> scheduleInfoList = schedulerJobService.getScheduleInfoList();
+    public ResponseEntity<List<ScheduleInfoDto>> getScheduleJobList(@RequestParam(value = "jobName", required = false) String jobName) {
+        List<ScheduleInfoDto> scheduleInfoList = schedulerJobService.getScheduleInfoList(jobName);
         return ResponseEntity.ok(scheduleInfoList);
     }
 
