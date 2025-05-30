@@ -8,7 +8,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/job.css?v=3">
+    <link rel="stylesheet" href="/css/job.css?v=4">
 </head>
 <body>
     <div class="sidebar">
@@ -44,6 +44,8 @@
     <div th:replace="~{modal/jobRegisterModal :: jobRegisterModal}"></div>
     <!-- 작업 수정 모달 -->
     <div th:replace="~{modal/jobModifyModal :: jobModifyModal}"></div>
+    <!-- 실행 이력 모달 -->
+    <div th:replace="~{modal/jobHistoryModal :: jobHistoryModal}"></div>
 
 
     <script type="text/javascript" src="/js/httpClient.js?v=3"></script>
@@ -54,6 +56,9 @@
 
             // 작업 수정 모달 초기 설정
             setupJobModifyModal();
+
+            // 실행 이력 모달 초기 설정
+            setupJobHistoryModal();
 
             // polling 1초 마다 작업 관리 조회
             setInterval(searchJobList, 1000);
@@ -69,8 +74,11 @@
                 cardBody.innerHTML = jobInfoList.map(jobInfo => `
                    <div class="jobcard-container" id="job-container">
                         <div class="jobcard-header">
-                            <span class="jobcard-name" onclick="openJobModifyModal(${jobInfo.id});">${jobInfo.jobName}</span>
-                            <span class="jobcard-status jobcard-status-${jobInfo.status.toLowerCase()}">${jobInfo.status}</span>
+                            <div class="left-side">
+                                <span class="jobcard-name" onclick="openJobModifyModal(${jobInfo.id});">${jobInfo.jobName}</span>
+                                <span class="jobcard-status jobcard-status-${jobInfo.status.toLowerCase()}">${jobInfo.status}</span>
+                            </div>
+                            <button class="view-history-button" onclick="openJobHistoryModal('${jobInfo.jobName}');">실행 이력</button>
                         </div>
                         <div class="jobcard-body">
                             <div><span class="jobcard-label">Cron 스케줄:</span>${jobInfo.cronExpression}</div>

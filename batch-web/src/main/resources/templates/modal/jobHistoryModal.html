@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>실행 이력 모달</title>
+</head>
+<body>
+
+<th:block th:fragment="jobHistoryModal">
+  <!-- grid.js css -->
+  <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+
+  <div id="jobHistoryModal" class="modal">
+    <div class="modal-content modal-lg">
+      <span class="close">&times;</span>
+
+      <h2>실행 이력</h2>
+      <form class="job-form">
+        <div class="form-group">
+          <label for="jobNameForJmm">작업 이름</label>
+          <input type="text" id="jobNameForJmm" name="jobName" disabled>
+        </div>
+
+        <div class="card">
+          <div class="card-header">이력 목록</div>
+          <div class="card-body" style="padding: 0;">
+            <div id="historyList"></div>
+          </div>
+        </div>
+
+        <div class="form-buttons">
+          <button type="button" class="cancel-btn">취소</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- grid.js 라이브러리 -->
+  <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        // grid 설정
+        var grid = new gridjs.Grid({
+         columns: [
+           {id: "id", name: "작업명", width: "150px"},
+           {id: "status", name: "상태", width: "100px"},
+           {id: "cron", name: "Cron 스케줄", width: "100px"},
+           {
+               id: "startDate",
+               name: "최근 실행시간",
+               width: "200px",
+               formatter: (cell) => new Date(cell).toLocaleString("ko-KR", {
+                 year: "numeric",
+                 month: "2-digit",
+                 day: "2-digit",
+                 hour: "2-digit",
+                 minute: "2-digit",
+                 second: "2-digit"
+               })
+           },
+         ],
+         data: []
+       }).render(document.getElementById("historyList"));
+
+       // grid row 선택 이벤트
+       grid.on('rowClick', (...args) => {
+           //const orderId = args[1]._cells[0].data;
+           //showOrderDetailModal(orderId);
+
+           alert('hello');
+       });
+    });
+
+    // 실행 이력 모달 초기 설정
+    function setupJobHistoryModal() {
+      const modal = document.getElementById('jobHistoryModal');
+      const form = modal.querySelector(".job-form");
+      const closeBtn = modal.querySelector(".close");
+      const cancelBtn = modal.querySelector(".cancel-btn");
+
+      function closeModal() {
+        modal.style.display = "none";
+        form.reset();
+      };
+
+      closeBtn.onclick = closeModal;
+      cancelBtn.onclick = closeModal;
+
+      // 모달 밖을 클릭했을 때 모달 종료
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          closeModal();
+        }
+      };
+    }
+
+    // 실행 이력 모달 열기
+    function openJobHistoryModal(jobName) {
+      const modal = document.getElementById('jobHistoryModal');
+      modal.style.display = "block";
+
+      const form = modal.querySelector(".job-form");
+      form.jobName.value = jobName;
+    }
+  </script>
+
+</th:block>
+
+</body>
+</html>
