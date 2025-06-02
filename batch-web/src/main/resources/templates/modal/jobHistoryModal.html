@@ -16,7 +16,7 @@
       <span class="close">&times;</span>
 
       <h2>실행 이력</h2>
-      <form class="job-form">
+      <form class="job-form" onsubmit="return false;">
         <div class="form-group">
           <label for="jobNameForJmm">작업 이름</label>
           <input type="text" id="jobNameForJmm" name="jobName" disabled>
@@ -25,7 +25,7 @@
         <div class="card">
           <div class="card-header">이력 목록</div>
           <div class="card-body" style="padding: 0;">
-            <div id="historyList"></div>
+            <div id="historyList" style="overflow-x: auto;"></div>
           </div>
         </div>
 
@@ -39,30 +39,76 @@
   <!-- grid.js 라이브러리 -->
   <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
   <script>
+    var grid;
+    var jobName;
+
     document.addEventListener("DOMContentLoaded", function() {
 
         // grid 설정
-        var grid = new gridjs.Grid({
-         columns: [
-           {id: "id", name: "작업명", width: "150px"},
-           {id: "status", name: "상태", width: "100px"},
-           {id: "cron", name: "Cron 스케줄", width: "100px"},
-           {
-               id: "startDate",
-               name: "최근 실행시간",
-               width: "200px",
-               formatter: (cell) => new Date(cell).toLocaleString("ko-KR", {
-                 year: "numeric",
-                 month: "2-digit",
-                 day: "2-digit",
-                 hour: "2-digit",
-                 minute: "2-digit",
-                 second: "2-digit"
-               })
-           },
-         ],
-         data: []
+        grid = new gridjs.Grid({
+            width: '1000px',   // 가로 스크롤을 사용할 것이므로 사이즈 고정
+            autoWidth: false,  // 그리드를 자동으로 맞추는 기능 끄기
+            columns: [
+              {id: "jobExecutionId", name: "번호", width: "100px"},
+              {id: "jobName", name: "작업명", width: "150px"},
+              {
+                id: "startTime",
+                name: "시작시간",
+                formatter: (cell) => dateFormat(cell),
+                width: "200px"
+              },
+              {
+                id: "endTime",
+                name: "종료시간",
+                formatter: (cell) => dateFormat(cell),
+                width: "200px"
+              },
+              {id: "status", name: "실행상태", width: "150px"},
+              {id: "exitCode", name: "종료코드", width: "150px"},
+              {id: "exitMessage", name: "종료메세지"},
+            ],
+            pagination: {
+              enabled: true,
+              limit: 5,
+              server: {
+                url: (prev, page, limit) => {
+                  return `/api/job/history/${jobName}?page=${page + 1}&pageSize=${limit}`;
+                }
+              }
+            },
+            server: {
+              url: (prev, page, limit) => {
+                return `/api/job/history/${jobName}?page=${page + 1}&pageSize=${limit}`;
+              },
+              then: data => data.jobHistoryList.map(item => [
+                item.jobExecutionId,
+                item.jobName,
+                item.startTime,
+                item.endTime,
+                item.status,
+                item.exitCode,
+                item.exitMessage,
+              ]),
+              total: data => data.totalElements
+            },
+            language: {
+              search: {
+                'placeholder': '🔍 검색중...'
+              },
+              pagination: {
+                'previous': '⬅️',
+                'next': '➡️',
+                'showing': '😃 번호',
+                'to': '~',
+                'of': ', 총',
+                'results': () => '건'
+              },
+              loading: 'Loading...',
+              noRecordsFound: '검색 결과가 존재하지 않습니다.',
+              error: '검색 중 오류가 발생하였습니다.'
+            },
        }).render(document.getElementById("historyList"));
+
 
        // grid row 선택 이벤트
        grid.on('rowClick', (...args) => {
@@ -97,12 +143,49 @@
     }
 
     // 실행 이력 모달 열기
-    function openJobHistoryModal(jobName) {
+    function openJobHistoryModal(targetJobName) {
       const modal = document.getElementById('jobHistoryModal');
       modal.style.display = "block";
 
       const form = modal.querySelector(".job-form");
-      form.jobName.value = jobName;
+      form.jobName.value = targetJobName;
+      jobName = targetJobName;
+
+      searchJobHistory();
+    }
+
+    // 실행 이력 조회
+    function searchJobHistory() {
+        grid.updateConfig({
+          server: {
+            url: (prev, page, limit) => {
+              return `/api/job/history/${jobName}?page=${page + 1}&pageSize=${limit}`;
+            },
+            then: data => data.jobHistoryList.map(item => [
+              item.jobExecutionId,
+              item.jobName,
+              item.startTime,
+              item.endTime,
+              item.status,
+              item.exitCode,
+              item.exitMessage,
+            ]),
+            total: data => data.totalElements
+          }
+        }).forceRender();
+    }
+
+    function dateFormat(dataArray) {
+      if(dataArray.length < 6) return '-';
+
+      const year = dataArray[0];
+      const month = String(dataArray[1]).padStart(2, '0');
+      const day = String(dataArray[2]).padStart(2, '0');
+
+      const hour = String(dataArray[3]).padStart(2, '0');
+      const minute = String(dataArray[4]).padStart(2, '0');
+      const second = String(dataArray[5]).padStart(2, '0');
+      return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
     }
   </script>
 

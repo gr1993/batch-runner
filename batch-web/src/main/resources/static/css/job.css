@@ -252,3 +252,9 @@ button:hover {
 .job-form button.cancel-btn:hover {
   background-color: #e53935;
 }
+
+
+/* gridjs 페이지네이션 버튼 */
+.gridjs-pages button {
+    color: black;
+}
