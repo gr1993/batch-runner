@@ -109,6 +109,32 @@ button:hover {
     align-items: center;
 }
 
+.job-toggle-button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.job-toggle-button.pause::before {
+  content: "⏹️";
+  color: red;
+}
+
+.job-toggle-button.resume::before {
+  content: "▶️";
+  color: green;
+}
+
 .view-history-button {
     margin-left: 10px;
     padding: 5px 10px;

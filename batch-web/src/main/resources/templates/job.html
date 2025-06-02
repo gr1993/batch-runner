@@ -8,7 +8,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/job.css?v=6">
+    <link rel="stylesheet" href="/css/job.css?v=7">
 </head>
 <body>
     <div class="sidebar">
@@ -75,6 +75,10 @@
                    <div class="jobcard-container" id="job-container">
                         <div class="jobcard-header">
                             <div class="left-side">
+                                <button class="job-toggle-button ${jobInfo.status === 'PAUSED' ? 'resume' : 'pause'}"
+                                    title="${jobInfo.status === 'PAUSED' ? '재개' : '중단'}"
+                                    onclick="toggleJob(${jobInfo.id}, '${jobInfo.status}')"
+                                ></button>
                                 <span class="jobcard-name" onclick="openJobModifyModal(${jobInfo.id});">${jobInfo.jobName}</span>
                                 <span class="jobcard-status jobcard-status-${jobInfo.status.toLowerCase()}">${jobInfo.status}</span>
                             </div>
@@ -88,7 +92,7 @@
                             <div><span class="jobcard-label">최근 실행:</span>${jobInfo.previousFireTime}</div>
                             <div><span class="jobcard-label">다음 실행:</span>${jobInfo.nextFireTime}</div>
                         </div>
-                    </div>
+                   </div>
                 `).join('');
             });
         }
@@ -98,6 +102,18 @@
             post(`/api/job/execute/${jobName}`, null, function() {
                 alert(jobName + ' 작업이 실행되었습니다.')
             });
+        }
+
+        // 스케줄 재개 및 중단
+        function toggleJob(id, status) {
+
+            // 중단 상태인 경우 재개 처리
+            if (status === 'PAUSED') {
+                post(`/api/job/resume/${id}`, null, function() { });
+            }
+            else {
+                post(`/api/job/pause/${id}`, null, function() { });
+            }
         }
     </script>
 </body>

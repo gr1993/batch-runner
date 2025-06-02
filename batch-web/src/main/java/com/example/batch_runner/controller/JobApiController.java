@@ -81,4 +81,22 @@ public class JobApiController {
         jobService.executeJob(jobName);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * 스케줄 중단
+     */
+    @PostMapping(value = "/pause/{id}")
+    public ResponseEntity<Void> pauseSchedule(@PathVariable(value = "id") long id) {
+        jobService.pauseSchedule(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 스케줄 재개
+     */
+    @PostMapping(value = "/resume/{id}")
+    public ResponseEntity<Void> resumeSchedule(@PathVariable(value = "id") long id) {
+        jobService.resumeSchedule(id);
+        return ResponseEntity.ok().build();
+    }
 }

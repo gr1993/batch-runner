@@ -62,6 +62,14 @@ public class JobService {
         restApiClient.post(batchCoreUrl + "/api/batch/execute/" + jobName, null);
     }
 
+    public void pauseSchedule(long id) {
+        restApiClient.post(batchCoreUrl + "/api/schedule/pause/" + id, null);
+    }
+
+    public void resumeSchedule(long id) {
+        restApiClient.post(batchCoreUrl + "/api/schedule/resume/" + id, null);
+    }
+
 
     private <T> T fetchAndParse(String url, TypeReference<T> typeRef) {
         try {
