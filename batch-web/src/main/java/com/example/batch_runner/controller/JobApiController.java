@@ -72,4 +72,13 @@ public class JobApiController {
                                                                @RequestParam(value = "pageSize") int pageSize) {
         return ResponseEntity.ok(jobService.getJobHistory(jobName, page, pageSize));
     }
+
+    /**
+     * 작업 수동 실행
+     */
+    @PostMapping(value = "/execute/{jobName}")
+    public ResponseEntity<Void> executeJob(@PathVariable(value = "jobName") String jobName) {
+        jobService.executeJob(jobName);
+        return ResponseEntity.ok().build();
+    }
 }

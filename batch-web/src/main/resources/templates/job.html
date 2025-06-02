@@ -8,7 +8,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/job.css?v=5">
+    <link rel="stylesheet" href="/css/job.css?v=6">
 </head>
 <body>
     <div class="sidebar">
@@ -78,7 +78,10 @@
                                 <span class="jobcard-name" onclick="openJobModifyModal(${jobInfo.id});">${jobInfo.jobName}</span>
                                 <span class="jobcard-status jobcard-status-${jobInfo.status.toLowerCase()}">${jobInfo.status}</span>
                             </div>
-                            <button class="view-history-button" onclick="openJobHistoryModal('${jobInfo.jobName}');">실행 이력</button>
+                            <div class="right-side">
+                                <button class="view-history-button" onclick="executeJob('${jobInfo.jobName}');">수동 실행</button>
+                                <button class="view-history-button" onclick="openJobHistoryModal('${jobInfo.jobName}');">실행 이력</button>
+                            </div>
                         </div>
                         <div class="jobcard-body">
                             <div><span class="jobcard-label">Cron 스케줄:</span>${jobInfo.cronExpression}</div>
@@ -87,6 +90,13 @@
                         </div>
                     </div>
                 `).join('');
+            });
+        }
+
+        // 작업 수동 실행
+        function executeJob(jobName) {
+            post(`/api/job/execute/${jobName}`, null, function() {
+                alert(jobName + ' 작업이 실행되었습니다.')
             });
         }
     </script>

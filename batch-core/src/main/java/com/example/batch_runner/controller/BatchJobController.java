@@ -43,7 +43,7 @@ public class BatchJobController {
                                                                @RequestParam(value = "page") int page,
                                                                @RequestParam(value = "pageSize") int pageSize) {
 
-        Pageable pageable = PageRequest.of(page, pageSize);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
         return ResponseEntity.ok(batchService.getJobHistory(jobName, pageable));
     }
 }

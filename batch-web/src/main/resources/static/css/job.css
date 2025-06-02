@@ -103,7 +103,8 @@ button:hover {
     margin-bottom: 14px;
 }
 
-.jobcard-header .left-side {
+.jobcard-header .left-side,
+.jobcard-header .right-side {
     display: flex;
     align-items: center;
 }
@@ -136,7 +137,8 @@ button:hover {
     color: #fff;
 }
 
-.jobcard-status-normal, .jobcard-status-running { background: #007bff; }
+.jobcard-status-normal { background: #e8e03f; }
+.jobcard-status-running { background: #007bff; }
 .jobcard-status-complete { background: #28a745; }
 .jobcard-status-paused, .jobcard-status-error, .jobcard-status-blocked  { background: #dc3545; }
 

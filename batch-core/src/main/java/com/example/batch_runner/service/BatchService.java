@@ -32,14 +32,16 @@ public class BatchService {
     public void executeJob(String jobName) {
         Job batchJob = jobRegistry.getJob(jobName);
 
-        try {
-            JobParametersBuilder builder = new JobParametersBuilder()
-                    .addLong("time", System.currentTimeMillis());
+        new Thread(() -> {
+            try {
+                JobParametersBuilder builder = new JobParametersBuilder()
+                        .addLong("time", System.currentTimeMillis());
 
-            jobLauncher.run(batchJob, builder.toJobParameters());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to run Spring Batch job", e);
-        }
+                jobLauncher.run(batchJob, builder.toJobParameters());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to run Spring Batch job", e);
+            }
+        }).start();
     }
 
     public JobHistoryResponseDto getJobHistory(String jobName, Pageable pageable) {

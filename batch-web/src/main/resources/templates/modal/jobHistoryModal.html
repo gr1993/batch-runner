@@ -161,7 +161,7 @@
     }
 
     function dateFormat(dataArray) {
-      if(dataArray.length < 6) return '-';
+      if(!dataArray || dataArray.length < 6) return '-';
 
       const year = dataArray[0];
       const month = String(dataArray[1]).padStart(2, '0');

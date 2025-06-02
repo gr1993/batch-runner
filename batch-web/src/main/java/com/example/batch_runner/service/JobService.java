@@ -58,6 +58,10 @@ public class JobService {
         return fetchAndParse(url, new TypeReference<JobHistoryResponseDto>() {});
     }
 
+    public void executeJob(String jobName) {
+        restApiClient.post(batchCoreUrl + "/api/batch/execute/" + jobName, null);
+    }
+
 
     private <T> T fetchAndParse(String url, TypeReference<T> typeRef) {
         try {
