@@ -40,7 +40,6 @@
   <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
   <script>
     var grid;
-    var jobName;
 
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -48,6 +47,7 @@
         grid = new gridjs.Grid({
             width: '1000px',   // 가로 스크롤을 사용할 것이므로 사이즈 고정
             autoWidth: false,  // 그리드를 자동으로 맞추는 기능 끄기
+            data: [],
             columns: [
               {id: "jobExecutionId", name: "번호", width: "100px"},
               {id: "jobName", name: "작업명", width: "150px"},
@@ -67,30 +67,6 @@
               {id: "exitCode", name: "종료코드", width: "150px"},
               {id: "exitMessage", name: "종료메세지"},
             ],
-            pagination: {
-              enabled: true,
-              limit: 5,
-              server: {
-                url: (prev, page, limit) => {
-                  return `/api/job/history/${jobName}?page=${page + 1}&pageSize=${limit}`;
-                }
-              }
-            },
-            server: {
-              url: (prev, page, limit) => {
-                return `/api/job/history/${jobName}?page=${page + 1}&pageSize=${limit}`;
-              },
-              then: data => data.jobHistoryList.map(item => [
-                item.jobExecutionId,
-                item.jobName,
-                item.startTime,
-                item.endTime,
-                item.status,
-                item.exitCode,
-                item.exitMessage,
-              ]),
-              total: data => data.totalElements
-            },
             language: {
               search: {
                 'placeholder': '🔍 검색중...'
@@ -143,20 +119,29 @@
     }
 
     // 실행 이력 모달 열기
-    function openJobHistoryModal(targetJobName) {
+    function openJobHistoryModal(jobName) {
       const modal = document.getElementById('jobHistoryModal');
       modal.style.display = "block";
 
       const form = modal.querySelector(".job-form");
-      form.jobName.value = targetJobName;
-      jobName = targetJobName;
+      form.jobName.value = jobName;
 
-      searchJobHistory();
+      searchJobHistory(jobName);
     }
 
     // 실행 이력 조회
-    function searchJobHistory() {
+    function searchJobHistory(jobName) {
+
         grid.updateConfig({
+          pagination: {
+              enabled: true,
+              limit: 5,
+              server: {
+                url: (prev, page, limit) => {
+                  return `/api/job/history/${jobName}?page=${page + 1}&pageSize=${limit}`;
+                }
+              }
+            },
           server: {
             url: (prev, page, limit) => {
               return `/api/job/history/${jobName}?page=${page + 1}&pageSize=${limit}`;
