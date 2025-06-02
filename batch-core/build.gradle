@@ -34,6 +34,9 @@ dependencies {
 	implementation 'org.springframework.batch.extensions:spring-batch-excel:0.1.1'
 	implementation 'org.apache.poi:poi-ooxml:5.4.0'
 
+	// JSON에 LocalDataTime을 사용하기 위해 추가
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.1'
 
 	compileOnly 'org.projectlombok:lombok'

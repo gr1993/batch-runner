@@ -1,6 +1,7 @@
 package com.example.batch_runner.controller;
 
 import com.example.batch_runner.domain.SchedulerJob;
+import com.example.batch_runner.dto.JobHistoryResponseDto;
 import com.example.batch_runner.dto.ScheduleInfoDto;
 import com.example.batch_runner.dto.SchedulerJobCreateDto;
 import com.example.batch_runner.dto.SchedulerJobUpdateDto;
@@ -60,5 +61,15 @@ public class JobApiController {
                                           @RequestBody SchedulerJobUpdateDto updateDto) {
         jobService.updateScheduleInfo(id, updateDto);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 실행 이력 조회
+     */
+    @GetMapping(value = "/history/{jobName}")
+    public ResponseEntity<JobHistoryResponseDto> getJobHistory(@PathVariable(value = "jobName") String jobName,
+                                                               @RequestParam(value = "page") int page,
+                                                               @RequestParam(value = "pageSize") int pageSize) {
+        return ResponseEntity.ok(jobService.getJobHistory(jobName, page, pageSize));
     }
 }

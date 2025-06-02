@@ -1,6 +1,7 @@
 package com.example.batch_runner.service;
 
 import com.example.batch_runner.domain.SchedulerJob;
+import com.example.batch_runner.dto.JobHistoryResponseDto;
 import com.example.batch_runner.dto.ScheduleInfoDto;
 import com.example.batch_runner.dto.SchedulerJobCreateDto;
 import com.example.batch_runner.dto.SchedulerJobUpdateDto;
@@ -22,7 +23,7 @@ public class JobService {
 
     private final SchedulerJobRepository schedulerJobRepository;
     private final RestApiClient restApiClient;
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
     @Value("${app.batch.core.url}")
     private String batchCoreUrl;
@@ -51,6 +52,12 @@ public class JobService {
     public void updateScheduleInfo(long id, SchedulerJobUpdateDto updateDto) {
         restApiClient.put(batchCoreUrl + "/api/schedule/" + id, updateDto);
     }
+
+    public JobHistoryResponseDto getJobHistory(String jobName, int page, int pageSize) {
+        String url = batchCoreUrl + "/api/batch/history/" + jobName + "?page=" + page + "&pageSize=" + pageSize;
+        return fetchAndParse(url, new TypeReference<JobHistoryResponseDto>() {});
+    }
+
 
     private <T> T fetchAndParse(String url, TypeReference<T> typeRef) {
         try {
