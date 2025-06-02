@@ -63,6 +63,7 @@
         var minLevel = 6;  // 지도에 클러스터 할 최소 지도 레벨
         var clusterer;
         var currentPolyline = null;  // 전역 변수로 선언 (이전 폴리라인 추적)
+        let currentPolylineLabel = [];
         var currentRouteId = null;  // 선택된 노선 ID
 
         var currentStopInfo;
@@ -242,6 +243,9 @@
                 currentPolyline.setMap(null);
                 currentPolyline = null;
             }
+            // 이전 폴리라인의 라벨들 제거
+            currentPolylineLabel.forEach(label => label.setMap(null));
+            currentPolylineLabel = [];
 
             // 노선에 속한 정류장 리스트 조회
             get(`/api/map/routes/${routeId}/stops`, function(stopList) {
@@ -265,6 +269,7 @@
                     });
 
                     label.setMap(map);
+                    currentPolylineLabel.push(label);
                 });
             });
         }
