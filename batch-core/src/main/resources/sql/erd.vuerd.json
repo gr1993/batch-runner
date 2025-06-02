@@ -1,0 +1,771 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dineug/erd-editor/main/json-schema/schema.json",
+  "version": "3.0.0",
+  "settings": {
+    "width": 2000,
+    "height": 2000,
+    "scrollTop": -3,
+    "scrollLeft": -1,
+    "zoomLevel": 1,
+    "show": 431,
+    "database": 4,
+    "databaseName": "runner",
+    "canvasType": "ERD",
+    "language": 1,
+    "tableNameCase": 4,
+    "columnNameCase": 2,
+    "bracketType": 1,
+    "relationshipDataTypeSync": true,
+    "relationshipOptimization": false,
+    "columnOrder": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "maxWidthComment": -1,
+    "ignoreSaveSettings": 0
+  },
+  "doc": {
+    "tableIds": [
+      "CrYqx82eLJtIXvuxZT0Fh",
+      "cmqmaFEjEnOrWO_Zt92oK",
+      "xaL8K4bf2nmIEGAEyXyF6",
+      "iOqg1tJBh8Xws8p-Aq156"
+    ],
+    "relationshipIds": [],
+    "indexIds": [
+      "K2RwFfiNkoPLrsfSo9-X7",
+      "bZR0V9veqCp3Cq-iB3j6u",
+      "J-hEH5ckWzDjFvVU3g3b6"
+    ],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {
+      "CrYqx82eLJtIXvuxZT0Fh": {
+        "id": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "route_stop_info",
+        "comment": "노선별 정류소",
+        "columnIds": [
+          "gMgmJwaXoax_El_i-SYi1",
+          "O2HdI4b4eN5_JUTHEJqYD",
+          "9SULC1GVKeNuN00a0gPY3",
+          "loY8gL5e7m8QlrNykBu0s",
+          "nzv0D71l6K8x1FFFNsBWp",
+          "SB9614VOMeKkd_XIXB1Km",
+          "KOPIS0Ka-nGR4XKaaOUjP",
+          "02z2RFeGEzKAmQ9P8nsNy"
+        ],
+        "seqColumnIds": [
+          "gMgmJwaXoax_El_i-SYi1",
+          "O2HdI4b4eN5_JUTHEJqYD",
+          "9SULC1GVKeNuN00a0gPY3",
+          "loY8gL5e7m8QlrNykBu0s",
+          "nzv0D71l6K8x1FFFNsBWp",
+          "SB9614VOMeKkd_XIXB1Km",
+          "KOPIS0Ka-nGR4XKaaOUjP",
+          "02z2RFeGEzKAmQ9P8nsNy"
+        ],
+        "ui": {
+          "x": 40,
+          "y": 365,
+          "zIndex": 2,
+          "widthName": 84,
+          "widthComment": 77,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1748846019009,
+          "createAt": 1748845248962
+        }
+      },
+      "cmqmaFEjEnOrWO_Zt92oK": {
+        "id": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "scheduler_job",
+        "comment": "스케줄 작업 테이블",
+        "columnIds": [
+          "xBA6FLsgy1hWa1maUe87J",
+          "bZzIiLl6KQOHUUtr_nndy",
+          "WL46UZazs7md_k5fat78U",
+          "i7zw9CgicuEQn4Q4KoysZ",
+          "7mLZyDExb3nnotnXHrg4B",
+          "4CEDvTSs_3dri8udvb7Ay",
+          "mBnMcESMjdoL_DcAo0Pdz",
+          "JHmCmezesMtIW18P7jPMg",
+          "Wg3V8-ADLGhha_ZZwUfSL"
+        ],
+        "seqColumnIds": [
+          "xBA6FLsgy1hWa1maUe87J",
+          "bZzIiLl6KQOHUUtr_nndy",
+          "WL46UZazs7md_k5fat78U",
+          "i7zw9CgicuEQn4Q4KoysZ",
+          "7mLZyDExb3nnotnXHrg4B",
+          "4CEDvTSs_3dri8udvb7Ay",
+          "mBnMcESMjdoL_DcAo0Pdz",
+          "JHmCmezesMtIW18P7jPMg",
+          "Wg3V8-ADLGhha_ZZwUfSL"
+        ],
+        "ui": {
+          "x": 340,
+          "y": 53,
+          "zIndex": 2,
+          "widthName": 75,
+          "widthComment": 105,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1748845911649,
+          "createAt": 1748845248963
+        }
+      },
+      "xaL8K4bf2nmIEGAEyXyF6": {
+        "id": "xaL8K4bf2nmIEGAEyXyF6",
+        "name": "route_bus_pos",
+        "comment": "노선의 버스 위치",
+        "columnIds": [
+          "TIJ3ckVIDVxI9N2l9rKfu",
+          "n8ugqXr-R5cuhjjoLhUh3",
+          "r28uuYMHGa4GSmWFSvOR3",
+          "uRTYbEYCokL0cd5lAx9fY",
+          "NUai263e5fPA5UV9tV4M0",
+          "oTm0hGlOAi5A0askoBKIN"
+        ],
+        "seqColumnIds": [
+          "TIJ3ckVIDVxI9N2l9rKfu",
+          "n8ugqXr-R5cuhjjoLhUh3",
+          "r28uuYMHGa4GSmWFSvOR3",
+          "uRTYbEYCokL0cd5lAx9fY",
+          "NUai263e5fPA5UV9tV4M0",
+          "oTm0hGlOAi5A0askoBKIN"
+        ],
+        "ui": {
+          "x": 509,
+          "y": 366,
+          "zIndex": 2,
+          "widthName": 78,
+          "widthComment": 93,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1748846093125,
+          "createAt": 1748845248964
+        }
+      },
+      "iOqg1tJBh8Xws8p-Aq156": {
+        "id": "iOqg1tJBh8Xws8p-Aq156",
+        "name": "favorite_route",
+        "comment": "즐겨찾기 정류소",
+        "columnIds": [
+          "JL_rI-XgYZt7yIaZV9YVc",
+          "Y-hkAyCTKd8k11cZQxVbL"
+        ],
+        "seqColumnIds": [
+          "JL_rI-XgYZt7yIaZV9YVc",
+          "Y-hkAyCTKd8k11cZQxVbL"
+        ],
+        "ui": {
+          "x": 955,
+          "y": 366,
+          "zIndex": 2,
+          "widthName": 75,
+          "widthComment": 89,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 1748846105823,
+          "createAt": 1748845248964
+        }
+      }
+    },
+    "tableColumnEntities": {
+      "gMgmJwaXoax_El_i-SYi1": {
+        "id": "gMgmJwaXoax_El_i-SYi1",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "route_id",
+        "comment": "노선ID",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 2,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845981843,
+          "createAt": 1748845248963
+        }
+      },
+      "O2HdI4b4eN5_JUTHEJqYD": {
+        "id": "O2HdI4b4eN5_JUTHEJqYD",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "route_name",
+        "comment": "노선명",
+        "dataType": "VARCHAR(100)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 65,
+          "widthComment": 60,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845985416,
+          "createAt": 1748845248963
+        }
+      },
+      "9SULC1GVKeNuN00a0gPY3": {
+        "id": "9SULC1GVKeNuN00a0gPY3",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "node_seq",
+        "comment": "정류소 순번",
+        "dataType": "INTEGER",
+        "default": "",
+        "options": 2,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 65,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845992276,
+          "createAt": 1748845248963
+        }
+      },
+      "loY8gL5e7m8QlrNykBu0s": {
+        "id": "loY8gL5e7m8QlrNykBu0s",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "node_id",
+        "comment": "정류소 ID",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845997969,
+          "createAt": 1748845248963
+        }
+      },
+      "nzv0D71l6K8x1FFFNsBWp": {
+        "id": "nzv0D71l6K8x1FFFNsBWp",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "ars_id",
+        "comment": "정류소 번호(고객용)",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 109,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846016946,
+          "createAt": 1748845248963
+        }
+      },
+      "SB9614VOMeKkd_XIXB1Km": {
+        "id": "SB9614VOMeKkd_XIXB1Km",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "node_name",
+        "comment": "정류소명",
+        "dataType": "VARCHAR(200)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 64,
+          "widthComment": 60,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846030443,
+          "createAt": 1748845248963
+        }
+      },
+      "KOPIS0Ka-nGR4XKaaOUjP": {
+        "id": "KOPIS0Ka-nGR4XKaaOUjP",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "pos_x",
+        "comment": "경도(X좌표)",
+        "dataType": "NUMERIC(10,7)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 64,
+          "widthDataType": 83,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846039566,
+          "createAt": 1748845248963
+        }
+      },
+      "02z2RFeGEzKAmQ9P8nsNy": {
+        "id": "02z2RFeGEzKAmQ9P8nsNy",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "name": "pos_y",
+        "comment": "위도(Y좌표)",
+        "dataType": "NUMERIC(10,7)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 64,
+          "widthDataType": 83,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846044809,
+          "createAt": 1748845248963
+        }
+      },
+      "xBA6FLsgy1hWa1maUe87J": {
+        "id": "xBA6FLsgy1hWa1maUe87J",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "id",
+        "comment": "식별자",
+        "dataType": "BIGSERIAL",
+        "default": "",
+        "options": 2,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845850440,
+          "createAt": 1748845248963
+        }
+      },
+      "bZzIiLl6KQOHUUtr_nndy": {
+        "id": "bZzIiLl6KQOHUUtr_nndy",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "job_name",
+        "comment": "쿼츠 작업명",
+        "dataType": "VARCHAR(100)",
+        "default": "",
+        "options": 12,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 65,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845864518,
+          "createAt": 1748845248963
+        }
+      },
+      "WL46UZazs7md_k5fat78U": {
+        "id": "WL46UZazs7md_k5fat78U",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "job_group",
+        "comment": "쿼츠 작업그룹",
+        "dataType": "VARCHAR(100)",
+        "default": "DEFAULT",
+        "options": 12,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 77,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845872806,
+          "createAt": 1748845248963
+        }
+      },
+      "i7zw9CgicuEQn4Q4KoysZ": {
+        "id": "i7zw9CgicuEQn4Q4KoysZ",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "cron_expression",
+        "comment": "크론 표현식",
+        "dataType": "VARCHAR(100)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 87,
+          "widthComment": 65,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845878723,
+          "createAt": 1748845248963
+        }
+      },
+      "7mLZyDExb3nnotnXHrg4B": {
+        "id": "7mLZyDExb3nnotnXHrg4B",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "use_yn",
+        "comment": "사용 여부",
+        "dataType": "CHAR(1)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845883248,
+          "createAt": 1748845248963
+        }
+      },
+      "4CEDvTSs_3dri8udvb7Ay": {
+        "id": "4CEDvTSs_3dri8udvb7Ay",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "description",
+        "comment": "작업 설명",
+        "dataType": "TEXT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 61,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845889824,
+          "createAt": 1748845248963
+        }
+      },
+      "mBnMcESMjdoL_DcAo0Pdz": {
+        "id": "mBnMcESMjdoL_DcAo0Pdz",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "job_params_json",
+        "comment": "작업 실행 시 파라미터",
+        "dataType": "JSONB",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 90,
+          "widthComment": 120,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845895915,
+          "createAt": 1748845248963
+        }
+      },
+      "JHmCmezesMtIW18P7jPMg": {
+        "id": "JHmCmezesMtIW18P7jPMg",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "created_at",
+        "comment": "생성 일시",
+        "dataType": "TIMESTAMP",
+        "default": "CURRENT_TIMESTAMP",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 65,
+          "widthDefault": 122
+        },
+        "meta": {
+          "updateAt": 1748845900142,
+          "createAt": 1748845248963
+        }
+      },
+      "Wg3V8-ADLGhha_ZZwUfSL": {
+        "id": "Wg3V8-ADLGhha_ZZwUfSL",
+        "tableId": "cmqmaFEjEnOrWO_Zt92oK",
+        "name": "updated_at",
+        "comment": "종료 일시",
+        "dataType": "TIMESTAMP",
+        "default": "CURRENT_TIMESTAMP",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 62,
+          "widthComment": 60,
+          "widthDataType": 65,
+          "widthDefault": 122
+        },
+        "meta": {
+          "updateAt": 1748845904047,
+          "createAt": 1748845248964
+        }
+      },
+      "TIJ3ckVIDVxI9N2l9rKfu": {
+        "id": "TIJ3ckVIDVxI9N2l9rKfu",
+        "tableId": "xaL8K4bf2nmIEGAEyXyF6",
+        "name": "veh_id",
+        "comment": "버스 ID",
+        "dataType": "BIGINT",
+        "default": "",
+        "options": 2,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846089867,
+          "createAt": 1748845248964
+        }
+      },
+      "n8ugqXr-R5cuhjjoLhUh3": {
+        "id": "n8ugqXr-R5cuhjjoLhUh3",
+        "tableId": "xaL8K4bf2nmIEGAEyXyF6",
+        "name": "route_id",
+        "comment": "노선 ID",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846084305,
+          "createAt": 1748845248964
+        }
+      },
+      "r28uuYMHGa4GSmWFSvOR3": {
+        "id": "r28uuYMHGa4GSmWFSvOR3",
+        "tableId": "xaL8K4bf2nmIEGAEyXyF6",
+        "name": "plain_no",
+        "comment": "차량 번호",
+        "dataType": "VARCHAR(100)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846081532,
+          "createAt": 1748845248964
+        }
+      },
+      "uRTYbEYCokL0cd5lAx9fY": {
+        "id": "uRTYbEYCokL0cd5lAx9fY",
+        "tableId": "xaL8K4bf2nmIEGAEyXyF6",
+        "name": "congetion",
+        "comment": "차량 내부 혼잡도",
+        "dataType": "INTEGER",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 93,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846075923,
+          "createAt": 1748845248964
+        }
+      },
+      "NUai263e5fPA5UV9tV4M0": {
+        "id": "NUai263e5fPA5UV9tV4M0",
+        "tableId": "xaL8K4bf2nmIEGAEyXyF6",
+        "name": "pos_x",
+        "comment": "경도(X좌표)",
+        "dataType": "NUMERIC(10,7)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 64,
+          "widthDataType": 83,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846053042,
+          "createAt": 1748845248964
+        }
+      },
+      "oTm0hGlOAi5A0askoBKIN": {
+        "id": "oTm0hGlOAi5A0askoBKIN",
+        "tableId": "xaL8K4bf2nmIEGAEyXyF6",
+        "name": "pos_y",
+        "comment": "위도(Y좌표)",
+        "dataType": "NUMERIC(10,7)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 64,
+          "widthDataType": 83,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748846060507,
+          "createAt": 1748845248964
+        }
+      },
+      "JL_rI-XgYZt7yIaZV9YVc": {
+        "id": "JL_rI-XgYZt7yIaZV9YVc",
+        "tableId": "iOqg1tJBh8Xws8p-Aq156",
+        "name": "route_id",
+        "comment": "노선 ID",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 2,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845971047,
+          "createAt": 1748845248964
+        }
+      },
+      "Y-hkAyCTKd8k11cZQxVbL": {
+        "id": "Y-hkAyCTKd8k11cZQxVbL",
+        "tableId": "iOqg1tJBh8Xws8p-Aq156",
+        "name": "node_id",
+        "comment": "정류소 ID",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 2,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1748845974888,
+          "createAt": 1748845248964
+        }
+      }
+    },
+    "relationshipEntities": {},
+    "indexEntities": {
+      "K2RwFfiNkoPLrsfSo9-X7": {
+        "id": "K2RwFfiNkoPLrsfSo9-X7",
+        "name": "idx_route_stop_info_route_id",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "indexColumnIds": [
+          "X_Nz8JETF9EnCo9s1fNQe"
+        ],
+        "seqIndexColumnIds": [
+          "X_Nz8JETF9EnCo9s1fNQe"
+        ],
+        "unique": false,
+        "meta": {
+          "updateAt": 1748845248964,
+          "createAt": 1748845248964
+        }
+      },
+      "bZR0V9veqCp3Cq-iB3j6u": {
+        "id": "bZR0V9veqCp3Cq-iB3j6u",
+        "name": "idx_route_stop_info_node_id",
+        "tableId": "CrYqx82eLJtIXvuxZT0Fh",
+        "indexColumnIds": [
+          "p9LPDXQw4_EgyMcQAoggZ"
+        ],
+        "seqIndexColumnIds": [
+          "p9LPDXQw4_EgyMcQAoggZ"
+        ],
+        "unique": false,
+        "meta": {
+          "updateAt": 1748845248964,
+          "createAt": 1748845248964
+        }
+      },
+      "J-hEH5ckWzDjFvVU3g3b6": {
+        "id": "J-hEH5ckWzDjFvVU3g3b6",
+        "name": "idx_route_bus_pos_route_id",
+        "tableId": "xaL8K4bf2nmIEGAEyXyF6",
+        "indexColumnIds": [
+          "-0RDSNtKot9c23hxla1HB"
+        ],
+        "seqIndexColumnIds": [
+          "-0RDSNtKot9c23hxla1HB"
+        ],
+        "unique": false,
+        "meta": {
+          "updateAt": 1748845248964,
+          "createAt": 1748845248964
+        }
+      }
+    },
+    "indexColumnEntities": {
+      "X_Nz8JETF9EnCo9s1fNQe": {
+        "id": "X_Nz8JETF9EnCo9s1fNQe",
+        "indexId": "K2RwFfiNkoPLrsfSo9-X7",
+        "columnId": "gMgmJwaXoax_El_i-SYi1",
+        "orderType": 1,
+        "meta": {
+          "updateAt": 1748845248964,
+          "createAt": 1748845248964
+        }
+      },
+      "p9LPDXQw4_EgyMcQAoggZ": {
+        "id": "p9LPDXQw4_EgyMcQAoggZ",
+        "indexId": "bZR0V9veqCp3Cq-iB3j6u",
+        "columnId": "loY8gL5e7m8QlrNykBu0s",
+        "orderType": 1,
+        "meta": {
+          "updateAt": 1748845248964,
+          "createAt": 1748845248964
+        }
+      },
+      "-0RDSNtKot9c23hxla1HB": {
+        "id": "-0RDSNtKot9c23hxla1HB",
+        "indexId": "J-hEH5ckWzDjFvVU3g3b6",
+        "columnId": "n8ugqXr-R5cuhjjoLhUh3",
+        "orderType": 1,
+        "meta": {
+          "updateAt": 1748845248964,
+          "createAt": 1748845248964
+        }
+      }
+    },
+    "memoEntities": {}
+  }
+}

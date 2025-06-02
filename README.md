@@ -66,8 +66,10 @@ Quartz를 사용한 이유는 다중 배치서버에서 스케줄 Job의 실행 
 
 # ERD
 
-테이블 생성 DDL 파일은 batch-core 모듈 resources/sql/schema.sql 에 위치하고 있다.
-
+작업 위치 : batch-core 프로젝트의 /resources/sql  
+erd.vuerd.json : ERD 파일(ERD 툴 : vscode의 확장인 ERD Editor)  
+schema.sql : 테이블 생성 DDL 파일  
+![ERD](./docs/erd.png)
 
 # 외부 API
 
