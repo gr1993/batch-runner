@@ -6,7 +6,7 @@
     <title>관리자 페이지</title>
 
     <link rel="stylesheet" href="/css/common.css">
-    <link rel="stylesheet" href="/css/map.css?v=4">
+    <link rel="stylesheet" href="/css/map.css?v=5">
 </head>
 <body>
     <div class="sidebar">
@@ -25,6 +25,14 @@
 
 
         <div class="main">
+            <!-- 마커 표시 컨트롤 -->
+            <div class="map-control">
+                <button id="marker-toggle-btn" class="marker-toggle active" onclick="toggleMarkersButton()">
+                    <img src="/image/bus-stop.png" alt="버스 마커" class="marker-icon">
+                    <span>정류소</span>
+                </button>
+            </div>
+
             <div id="map"></div>
 
             <!-- 정류소 정보 패널 UI -->
@@ -60,7 +68,9 @@
         var currentStopInfo;
         var currentStopMarker;
         var favoriteStopInfos = {};
+        var stopMarkers = [];
         var busMarkers = [];
+        var markersVisible = true;
 
         document.addEventListener("DOMContentLoaded", function() {
             // 지도 생성
@@ -141,6 +151,8 @@
                 const end = Math.min(i + chunkSize, data.length);
                 const chunk = data.slice(i, end).map(stop => {
                     var marker = createMarker(new kakao.maps.LatLng(stop.lat, stop.lng), 'stop', stop.nodeName);
+                    stopMarkers.push(marker);
+
                     kakao.maps.event.addListener(marker, 'click', function() {
                         showBusStopInfo(stop);
                     });
@@ -359,9 +371,24 @@
             };
         }
 
+        // 버스 위치 마커 전부 제거
         function clearBusMarkers() {
             busMarkers.forEach((marker) => marker.setMap(null));
             busMarkers = [];
+        }
+
+        // 마커 표시 컨트롤 버튼 이벤트
+        function toggleMarkersButton() {
+            const button = document.getElementById('marker-toggle-btn');
+            markersVisible = !markersVisible;
+
+            if (markersVisible) {
+                button.classList.add('active');
+                clusterer.addMarkers(stopMarkers);
+            } else {
+                button.classList.remove('active');
+                clusterer.clear();
+            }
         }
     </script>
 
