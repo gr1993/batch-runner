@@ -51,9 +51,9 @@ Quartz를 사용한 이유는 다중 배치서버에서 스케줄 Job의 실행 
 * routeStopExcelParallelJob : routeStopExcelJob 배치 작업의 병렬 처리 버전으로 구현한 작업 
 
 ### 병렬 처리(성능 개선 작업)
-routeStopExcelJob 배치 작업은 내 PC에서 작업 시간이 평균 50~55초 정도 걸렸다. 47,628건의 정류소 정보가 엑셀에  
+routeStopExcelJob 배치 작업은 내 PC에서 작업 시간이 평균 50 ~ 55초 정도 걸렸다. 47,628건의 정류소 정보가 엑셀에  
 존재하였지만 이렇게 오래걸릴 작업은 아니라 생각하여 Writer를 JPA 방식에서 JDBC로 변경하였다.  
-병렬 처리 없이 JdbcBatchItemWriter로만 변경해도 50~55초 걸리던 작업이 6~8초 정도로 8배 정도 성능이 개선되었다. 
+병렬 처리 없이 JdbcBatchItemWriter로만 변경해도 50 ~ 55초 걸리던 작업이 6 ~ 8초 정도로 8배 정도 성능이 개선되었다. 
 또한 JdbcBatchItemWriter는 Thread-Safe 하다는 것을 공식 gibhub 코드의 javadoc으로 확인하였다.  
 그러나 엑셀파일을 읽을 때 사용했던 PoiItemReader는 Thread-Safe하지 못함을 확인해서 별도 구현이 필요했다.  
 
