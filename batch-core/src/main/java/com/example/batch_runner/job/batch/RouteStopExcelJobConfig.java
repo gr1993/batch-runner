@@ -113,7 +113,7 @@ public class RouteStopExcelJobConfig {
      */
     @Bean
     @JobScope
-    public Set<String> validRouteStopKeys() {
+    public Set<RouteStopInfoId> validRouteStopKeys() {
         return ConcurrentHashMap.newKeySet();
     }
 

@@ -48,14 +48,21 @@ Quartz를 사용한 이유는 다중 배치서버에서 스케줄 Job의 실행 
 * simpleJob : Tasklet Step으로 구현된 테스트용 Job
 * routeStopExcelJob : 엑셀 파일을 읽어 노선별 전체 정류소 정보를 DB에 저장
 * routeBusPosApiJob : 공공데이터 포털의 버스 위치 API를 호출하여 관심 노선에 속한 버스들의 실시간 위치 정보를 주기적으로 수집하고 저장한다.
+* routeStopExcelParallelJob : routeStopExcelJob 배치 작업의 병렬 처리 버전으로 구현한 작업 
+
+### 병렬 처리
+routeStopExcelJob 배치 작업은 내 PC에서 작업 시간이 평균 50~55초 정도 걸렸다. 47,628건의 정류소 정보가 엑셀에  
+존재하였지만 이렇게 오래걸릴 작업은 아니라 생각하여 Writer를 JPA 방식에서 JDBC로 변경하였다.  
+JdbcBatchItemWriter는 Thread-Safe 하다는 것을 공식 gibhub 코드의 javadoc으로 확인하였다.    
+
 
 
 # 개발 환경
 
 ### batch-core 기술
 * Spring Boot 3.4.5 (JDK 17)
-* spring-boot-starter-quartz : 스케줄러
-* spring-boot-starter-batch
+* spring-boot-starter-quartz 3.4.5 : 스케줄러(org.quartz-scheduler:quartz:2.3.2)
+* spring-boot-starter-batch 5.2.2
 * JPA
 * postgresql
 
