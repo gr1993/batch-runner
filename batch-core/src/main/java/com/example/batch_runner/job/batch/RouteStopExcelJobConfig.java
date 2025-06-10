@@ -7,6 +7,8 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -48,6 +50,12 @@ public class RouteStopExcelJobConfig {
         return new JobBuilder("routeStopExcelJob", jobRepository)
                 .start(routeStopExcelStep(validRouteStopKeys))
                 .next(deleteMissingRouteStopsStep(validRouteStopKeys))
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(JobExecution jobExecution) {
+                        validRouteStopKeys.clear();
+                    }
+                })
                 .build();
     }
 
@@ -112,7 +120,6 @@ public class RouteStopExcelJobConfig {
      * 엑셀 데이터에 있는 Row의 키를 임시저장하기 위한 용도
      */
     @Bean
-    @JobScope
     public Set<RouteStopInfoId> validRouteStopKeys() {
         return ConcurrentHashMap.newKeySet();
     }

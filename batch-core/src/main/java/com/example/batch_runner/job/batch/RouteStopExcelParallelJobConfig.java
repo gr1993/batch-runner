@@ -5,6 +5,8 @@ import com.example.batch_runner.domain.RouteStopInfoId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -56,6 +58,12 @@ public class RouteStopExcelParallelJobConfig {
         return new JobBuilder("routeStopExcelParallelJob", jobRepository)
                 .start(excelParallelMasterStep(validRouteStopKeys))
                 .next(deleteMissingRouteStopsStep) // 오래 안걸리는 Step은 재사용
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(JobExecution jobExecution) {
+                        validRouteStopKeys.clear();
+                    }
+                })
                 .build();
     }
 
