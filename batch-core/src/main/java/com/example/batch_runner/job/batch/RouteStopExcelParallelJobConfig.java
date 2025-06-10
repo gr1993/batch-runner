@@ -42,7 +42,7 @@ public class RouteStopExcelParallelJobConfig {
     private final PlatformTransactionManager transactionManager;
     private final DataSource dataSource;
 
-    private static final int CHUNK_SIZE = 5000;
+    private static final int CHUNK_SIZE = 1000;
 
     // 엑셀 파일을 물리적으로 나눔
     private final List<String> fileNames = List.of(

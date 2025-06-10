@@ -62,6 +62,7 @@ routeStopExcelJob 배치 작업은 내 PC에서 작업 시간이 평균 50 ~ 55�
 그러나 엑셀파일을 읽을 때 사용했던 PoiItemReader는 Thread-Safe하지 못함을 확인해서 별도 구현이 필요했다.  
 PoiItemReader를 Thread-Safe 하게 변경하는 방법(동기화 처리)보다 Partitioning 방식으로 구현하여 엑셀 파일을 N개의  
 조각으로 나누고 동시에 읽는 방식이 성능 개선이 극대화 될 것이라 판단하고 Partitioning 방식으로 구현하였다.
+최종적으로 병렬 처리를 구현하고 chunk 사이즈를 조정하여 5초 이내로 작업을 처리할 수 있었다.
 
 
 # 개발 환경
