@@ -15,6 +15,10 @@
     └── 배치 작업 관리 및 모니터링 기능을 제공하는 웹 기반 실행 모듈
     └── 스케줄 실행 트리거 및 관리 UI 제공
     └── Spring Batch 메타 테이블을 활용한 실행 로그 조회 기능 제공
+
+* 모듈 빌드 명령어 *
+[batch-core] : ./gradlew :batch-core:build -x test
+[batch-web]  : ./gradlew :batch-web:build -x test
 ``` </code></pre>
 
 
