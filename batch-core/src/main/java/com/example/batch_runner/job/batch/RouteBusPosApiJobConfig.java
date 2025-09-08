@@ -1,11 +1,10 @@
 package com.example.batch_runner.job.batch;
 
-import com.example.batch_runner.domain.FavoriteRoute;
 import com.example.batch_runner.domain.RouteBusPos;
-import com.example.batch_runner.external.client.RestApiClient;
 import com.example.batch_runner.external.dto.BusPosition;
 import com.example.batch_runner.external.dto.ServiceResult;
 import com.example.batch_runner.repository.RouteBusPosRepository;
+import com.example.batch_runner.util.RestApiClient;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

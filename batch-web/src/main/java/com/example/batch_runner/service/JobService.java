@@ -5,11 +5,8 @@ import com.example.batch_runner.dto.JobHistoryResponseDto;
 import com.example.batch_runner.dto.ScheduleInfoDto;
 import com.example.batch_runner.dto.SchedulerJobCreateDto;
 import com.example.batch_runner.dto.SchedulerJobUpdateDto;
-import com.example.batch_runner.external.client.RestApiClient;
 import com.example.batch_runner.repository.SchedulerJobRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.batch_runner.util.RestApiClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,14 +20,13 @@ public class JobService {
 
     private final SchedulerJobRepository schedulerJobRepository;
     private final RestApiClient restApiClient;
-    private final ObjectMapper mapper;
 
     @Value("${app.batch.core.url}")
     private String batchCoreUrl;
 
 
     public List<String> getBatchJobNameList() {
-        return fetchAndParse(batchCoreUrl + "/api/batch/jobs", new TypeReference<List<String>>() {});
+        return restApiClient.fetchList(batchCoreUrl + "/api/batch/jobs", String.class);
     }
 
     public List<ScheduleInfoDto> getScheduleInfoList(String jobName) {
@@ -38,7 +34,7 @@ public class JobService {
         if (StringUtils.hasText(jobName)) {
             uri += "?jobName=" + jobName;
         }
-        return fetchAndParse(batchCoreUrl + uri, new TypeReference<List<ScheduleInfoDto>>() {});
+        return restApiClient.fetchList(batchCoreUrl + uri, ScheduleInfoDto.class);
     }
 
     public SchedulerJob getScheduleJob(long id) {
@@ -55,7 +51,7 @@ public class JobService {
 
     public JobHistoryResponseDto getJobHistory(String jobName, int page, int pageSize) {
         String url = batchCoreUrl + "/api/batch/history/" + jobName + "?page=" + page + "&pageSize=" + pageSize;
-        return fetchAndParse(url, new TypeReference<JobHistoryResponseDto>() {});
+        return restApiClient.get(url, JobHistoryResponseDto.class);
     }
 
     public void executeJob(String jobName) {
@@ -70,13 +66,4 @@ public class JobService {
         restApiClient.post(batchCoreUrl + "/api/schedule/resume/" + id, null);
     }
 
-
-    private <T> T fetchAndParse(String url, TypeReference<T> typeRef) {
-        try {
-            String json = restApiClient.get(url, String.class);
-            return mapper.readValue(json, typeRef);
-        } catch (JsonProcessingException ex) {
-            throw new RuntimeException("JSON 파싱 실패: " + url, ex);
-        }
-    }
 }

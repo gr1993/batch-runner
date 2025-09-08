@@ -1,17 +1,21 @@
-package com.example.batch_runner.external.client;
+package com.example.batch_runner.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Unmarshaller;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.StringReader;
 import java.net.URI;
+import java.util.List;
 
-@Component
 @RequiredArgsConstructor
 public class RestApiClient {
 
@@ -19,30 +23,45 @@ public class RestApiClient {
     private final ObjectMapper objectMapper;
 
     public <T> T get(String url, Class<T> responseType) {
-        return request(HttpMethod.GET, url, null, responseType);
+        return request(HttpMethod.GET, url, null,null, responseType);
+    }
+
+    public <T> T get(String url, HttpHeaders headers, Class<T> responseType) {
+        return request(HttpMethod.GET, url, headers,null, responseType);
     }
 
     public void post(String url, Object requestBody) {
-        request(HttpMethod.POST, url, requestBody, String.class);
+        request(HttpMethod.POST, url, null, requestBody, String.class);
+    }
+
+    public <T> T post(String url, Object requestBody, Class<T> responseType) {
+        return request(HttpMethod.POST, url, null, requestBody, responseType);
     }
 
     public void put(String url, Object requestBody) {
-        request(HttpMethod.PUT, url, requestBody, String.class);
+        request(HttpMethod.PUT, url, null, requestBody, String.class);
     }
 
     public void delete(String url) {
-        request(HttpMethod.DELETE, url, null, String.class);
+        request(HttpMethod.DELETE, url, null,null, String.class);
     }
 
-    private <T> T request(HttpMethod httpMethod, String url, Object requestBody, Class<T> responseType) {
+    /**
+     * GET API 응답 형식이 단일 객체가 아닌 리스트 형식 일 때 사용
+     */
+    public <T> List<T> fetchList(String url, Class<T> elementType) {
         try {
-            HttpHeaders headers = new HttpHeaders();
-            HttpEntity<Object> requestEntity = null;
+            String json = get(url, String.class);
+            JavaType listType = objectMapper.getTypeFactory().constructCollectionType(List.class, elementType);
+            return objectMapper.readValue(json, listType);
+        } catch (JsonProcessingException ex) {
+            throw new RuntimeException("JSON 파싱 실패: " + url, ex);
+        }
+    }
 
-            if (requestBody != null) {
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                requestEntity = new HttpEntity<>(requestBody, headers);
-            }
+    private <T> T request(HttpMethod httpMethod, String url, HttpHeaders headers, Object requestBody, Class<T> responseType) {
+        try {
+            HttpEntity<Object> requestEntity = new HttpEntity<>(requestBody, headers);
 
             ResponseEntity<String> response = restTemplate.exchange(
                     new URI(url), httpMethod, requestEntity, String.class

@@ -1,5 +1,6 @@
 package com.example.batch_runner.config;
 
+import com.example.batch_runner.util.RestApiClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
@@ -19,5 +20,10 @@ public class AppConfig {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         return mapper;
+    }
+
+    @Bean
+    public RestApiClient restApiClient() {
+        return new RestApiClient(restTemplate(), objectMapper());
     }
 }

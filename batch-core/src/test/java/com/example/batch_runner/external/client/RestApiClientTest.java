@@ -1,6 +1,7 @@
 package com.example.batch_runner.external.client;
 
 import com.example.batch_runner.external.dto.ServiceResult;
+import com.example.batch_runner.util.RestApiClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
