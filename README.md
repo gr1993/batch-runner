@@ -35,7 +35,7 @@
 ### 배치 작업
 * simpleJob : Tasklet Step으로 구현된 테스트용 Job
 * routeStopExcelJob : 엑셀 파일을 읽어 노선별 전체 정류소 정보를 DB에 저장
-* routeBusPosApiJob : 공공데이터 포털의 버스 위치 API를 호출하여 관심 노선에 속한 버스들의 실시간 위치 정보를 주기적으로 수집하고 저장한다.
+* routeBusPosApiJob : 공공데이터 포털의 버스 위치 API를 호출하여 관심 노선에 속한 버스들의 위치 정보를 주기적으로 수집하고 저장한다.
 * routeStopExcelParallelJob : routeStopExcelJob 배치 작업의 병렬 처리 버전으로 구현한 작업
 
 ### 스케줄러
@@ -46,7 +46,7 @@ Quartz를 사용한 이유는 다중 배치서버에서 스케줄 Job의 실행 
 routeStopExcelJob 배치 작업은 내 PC에서 작업 시간이 평균 50 ~ 55초 정도 걸렸다. 47,628건의 정류소 정보가 엑셀에
 존재하였지만 이렇게 오래걸릴 작업은 아니라 생각하여 Writer를 JPA 방식에서 JDBC로 변경하였다.
 병렬 처리 없이 JdbcBatchItemWriter로만 변경해도 50 ~ 55초 걸리던 작업이 6 ~ 8초 정도로 8배 정도 성능이 개선되었다.
-또한 JdbcBatchItemWriter는 Thread-Safe 하다는 것을 공식 gibhub 코드의 javadoc으로 확인하였다.
+또한 JdbcBatchItemWriter는 Thread-Safe 하다는 것을 공식 github 코드의 javadoc으로 확인하였다.
 그러나 엑셀파일을 읽을 때 사용했던 PoiItemReader는 Thread-Safe하지 못함을 확인해서 별도 구현이 필요했다.
 PoiItemReader를 Thread-Safe 하게 변경하는 방법(동기화 처리)보다 Partitioning 방식으로 구현하여 엑셀 파일을 N개의
 조각으로 나누고 동시에 읽는 방식이 성능 개선이 극대화 될 것이라 판단하고 Partitioning 방식으로 구현하였다.
@@ -73,7 +73,7 @@ PoiItemReader를 Thread-Safe 하게 변경하는 방법(동기화 처리)보다 
 ### batch-core 기술
 * Spring Boot 3.4.5 (JDK 17)
 * spring-boot-starter-quartz 3.4.5 : 스케줄러(org.quartz-scheduler:quartz:2.3.2)
-* spring-boot-starter-batch 5.2.2
+* spring-boot-starter-batch (Spring Batch 5.2.2)
 * JPA
 * postgresql
 
